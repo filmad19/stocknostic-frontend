@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {StockDataService} from "../../services/stock-data.service";
 
 @Component({
   selector: 'app-stock-card',
@@ -7,8 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StockCardComponent  implements OnInit {
 
-  constructor() { }
+  constructor(
+    private stockDataService: StockDataService
+  ) { }
 
-  ngOnInit() {}
-
+  ngOnInit() {
+    this.stockDataService.testBackend().subscribe(test => {
+      console.log(test)
+    });
+  }
 }

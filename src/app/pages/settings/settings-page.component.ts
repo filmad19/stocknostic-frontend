@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-setting',
-  templateUrl: './setting.page.html',
-  styleUrls: ['./setting.page.scss'],
+  templateUrl: './settings.page.html',
+  styleUrls: ['./settings.page.scss'],
 })
-export class SettingPage implements OnInit {
+export class SettingsPage implements OnInit {
 
   constructor() { }
 
