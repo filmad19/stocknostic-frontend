@@ -1,23 +1,39 @@
 <ion-card>
+
   <ion-toolbar>
-    <ion-buttons slot="primary">
+  <ion-buttons slot="primary">
+    <ion-button>
       <ion-icon size="small" name="ellipsis-vertical-outline"></ion-icon>
-    </ion-buttons>
-
-    <ion-buttons slot="primary">
+    </ion-button>
+    <ion-button>
       <ion-icon  size="small" name="heart-outline"></ion-icon>
-    </ion-buttons>
+    </ion-button>
+  </ion-buttons>
 
-    <ion-card-title>Stock</ion-card-title>
-    <ion-card-subtitle>Stock Inc. (-8.0%) </ion-card-subtitle>
+    <ion-button fill="clear" size="large">Stock</ion-button>
+
+    <ion-card-subtitle class="pl-6">Stock Inc. (<span class="text-red-700 font-bold">-8.0%</span>) </ion-card-subtitle>
+
   </ion-toolbar>
 
   <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" />
-  <ion-card-header>
-
-  </ion-card-header>
 
   <ion-card-content>
-    Here's a small text description for the card content. Nothing more, nothing less.
+    <div class="flex flex-row items-center">
+      <ion-button slot="start" fill="outline">Indicators</ion-button>
+
+      <div class="ml-auto border-2 border-blue-600 rounded-lg p-3">
+        <h3>Price: <span class="font-bold">100.53 EUR</span></h3>
+      </div>
+    </div>
+
+    <div class="flex flex-row items-center pt-4">
+      <div class="flex flex-row items-center border-2 border-blue-600 rounded-lg p-3 w-full">
+        <span>Recommendation: </span>
+        <span class="font-bold text-red-700 ml-auto">sell</span>
+      </div>
+    </div>
+
+
   </ion-card-content>
 </ion-card>
