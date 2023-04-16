@@ -8,14 +8,16 @@ import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
 import {StockCardComponent} from "../../components/stock-card/stock-card.component";
+import {NgChartsModule} from "ng2-charts";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        IonicModule,
-        HomePageRoutingModule
-    ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    HomePageRoutingModule,
+    NgChartsModule
+  ],
     exports: [
         StockCardComponent
     ],

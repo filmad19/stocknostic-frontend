@@ -7,7 +7,8 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {HttpClientModule} from "@angular/common/http";
+import { HttpClientModule } from "@angular/common/http";
+import { NgChartsModule } from "ng2-charts";
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,6 +17,7 @@ import {HttpClientModule} from "@angular/common/http";
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    NgChartsModule,
   ],
   providers: [{
     provide: RouteReuseStrategy,

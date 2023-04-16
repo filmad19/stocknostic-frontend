@@ -15,4 +15,9 @@ export class StockDataService {
       environment.apiPath + "/stock"
     )
   }
+
+  getStockData(symbol: string, interval: string) {
+    const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}`
+    return this.http.get<any>(url);
+  }
 }
