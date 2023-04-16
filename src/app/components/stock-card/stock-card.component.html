@@ -16,12 +16,13 @@
 
   </ion-toolbar>
 
-  <div class="w-full flex justify-center">
-    <canvas #chart baseChart
+  <div class="w-full flex justify-center chart-wrapper">
+    <canvas baseChart #canva
             [type]="'line'"
-            [data]="lineChartData"
-            [options]="lineChartOptions"
-            [legend]="lineChartLegend">
+            [datasets]="chartData"
+            [labels]="chartLabels"
+            [options]="chartOptions"
+    >
     </canvas>
 
 <!--    <app-stock-card></app-stock-card>-->

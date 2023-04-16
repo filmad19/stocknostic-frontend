@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {StockDataService} from "../../services/stock-data.service";
-import {ChartConfiguration, ChartOptions} from "chart.js";
+import {ChartConfiguration, ChartOptions, scales} from 'chart.js';
 
 @Component({
   selector: 'app-stock-card',
@@ -8,110 +8,86 @@ import {ChartConfiguration, ChartOptions} from "chart.js";
   styleUrls: ['./stock-card.component.scss'],
 })
 export class StockCardComponent  implements OnInit {
-
-  chartData: number[] = [];
-  chartLabels: string[] = [];
-
   constructor(private stockDataService: StockDataService) {}
 
-  @ViewChild('chart') canvasRef: ElementRef | any;
-  // private ctx: CanvasRenderingContext2D | any;
+  @ViewChild('canva') canvasRef: ElementRef | any;
 
+  ngOnInit(){
+  }
 
-
-  // ngAfterViewInit
-  ngOnInit() {
-    // this.ctx = this.canvasRef.nativeElement.getContext('2d');
+  ngAfterViewInit() {
+    let ctx = this.canvasRef.nativeElement.getContext('2d');
 
     this.stockDataService.getStockData('BTCUSDT', "1m").subscribe(response => {
-      // response = response.slice(0, 10);
-      this.chartLabels = response.map((entry: any) => entry[0]%100_000/10_000);
-      this.chartData = response.map((entry: any) => entry[1]);
-      console.log("lables")
-      console.log(this.chartLabels)
-      console.log("lablesd")
-      console.log(this.chartData)
+      this.chartLabels = response.map((entry: any) => entry[0] % 100_000 / 10_000);
+      let data = response.map((entry: any) => entry[1]);
 
-      // const gradient = this.ctx.createLinearGradient(0, 0, 0, 450);
-      // gradient.addColorStop(0, 'rgba(74, 20, 140, 0.1)');
-      // gradient.addColorStop(0.5, 'rgba(74, 20, 140, 0.05)');
-      // gradient.addColorStop(1, 'rgba(74, 20, 140, 0)');
+      const gradient = ctx.createLinearGradient(0, 0, 0, 450);
+      gradient.addColorStop(0, 'rgb(0,255,0)');
+      gradient.addColorStop(1, 'rgba(0, 255, 0, 0)');
+
+      console.log(data)
 
 
-      this.lineChartData = {
-        labels: this.chartLabels,
-        datasets: [
-          {
-            data: this.chartData,
-            label: 'AAPL',
-            fill: true,
-            tension: 0.5,
-            borderColor: '#4a148c',
-            borderWidth: 2,
-            // backgroundColor: 'green',
-            pointRadius: 0,
-          },
-        ],
-        options: {
-          aspectRatio: 3,
-          plugins: {
-            title: {
-              display: true,
-              text: 'BTC/USDT Price Chart',
-              font: {
-                size: 20,
-                weight: 'bold',
-              }
-            },
-          },
-          scales: {
-            x: {
-              title: {
-                display: true,
-                text: 'Time',
-                font: {
-                  size: 16,
-                  weight: 'bold',
-                }
-              },
-              grid: {
-                display: true,
-                color: '#bdbdbd',
-              },
-            },
-            y: {
-              title: {
-                display: true,
-                text: 'Price (USD)',
-                font: {
-                  size: 16,
-                  weight: 'bold',
-                }
-              },
-              grid: {
-                display: true,
-                color: '#bdbdbd',
-              },
-            }
-          },
-          scripts: [
-            "node_modules/chart.js/dist/Chart.min.js"
-          ],
-          allowedCommonJsDependencies: [
-            "chart.js"
-          ]
+      this.chartData = [
+        {
+          label: '$',
+          data: data,
+
+          pointHitRadius: 15, // expands the hover 'detection' area
+          pointHoverRadius: 8, // grows the point when hovered
+          pointRadius: 0,
+
+          borderColor: 'green', // main line color aka $midnight-medium from @riapacheco/yutes/seasonal.scss
+          pointBackgroundColor: 'green',
+          // pointHoverBackgroundColor: '$success',
+
+          borderWidth: 2, // main line width
+          hoverBorderWidth: 0, // borders on points
+          pointBorderWidth: 0, // removes POINT borders
+          tension: 0.3, // makes line more squiggly
+
+          backgroundColor: gradient,
+
+          scripts: "node_modules/chart.js/dist/Chart.min.js",
+          allowedCommonJsDependencies: "chart.js",
+
+
         }
-      };
+      ];
     });
   }
 
 
+  chartLabels: string[] | any;
+  chartData: ChartConfiguration<'line'>['data'] | any;
+  chartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    maintainAspectRatio: false,
 
-  public lineChartData: ChartConfiguration<'line'>['data'] | any;
-  public lineChartOptions: ChartOptions<'line'> = {
-    responsive: false
+    plugins: {
+      legend: {
+        display: false
+      },
+
+      tooltip: {
+        // ⤵️ tooltip main styles
+        backgroundColor: 'white',
+        displayColors: false, // removes unnecessary legend
+        padding: 10,
+
+        // ⤵️ title
+        titleColor: '#2D2F33',
+        titleFont: {
+          size: 18
+        },
+
+        // ⤵️ body
+        bodyColor: '#2D2F33',
+        bodyFont: {
+          size: 13
+        }
+      }
+    },
   };
-  public lineChartLegend = true;
-
-
 }

@@ -26,6 +26,7 @@
     "@capacitor/keyboard": "4.1.1",
     "@capacitor/status-bar": "4.1.1",
     "@ionic/angular": "^6.1.9",
+    "@riapacheco/yutes": "^4.2.4",
     "@types/chart.js": "^2.9.37",
     "chart.js": "^4.2.1",
     "ionicons": "^6.0.3",
