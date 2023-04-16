@@ -29,7 +29,7 @@ export class StockCardComponent  implements OnInit {
       this.chartData = response.map((entry: any) => entry[1]);
       console.log("lables")
       console.log(this.chartLabels)
-      console.log("lables")
+      console.log("lablesd")
       console.log(this.chartData)
 
       // const gradient = this.ctx.createLinearGradient(0, 0, 0, 450);
