@@ -10,8 +10,8 @@ export class StockDataService {
   constructor(private http: HttpClient) { }
 
 
-  testBackend(){
-    return this.http.get<string> (
+  getAllStocks(){
+    return this.http.get<any> (
       environment.apiPath + "/stock"
     )
   }

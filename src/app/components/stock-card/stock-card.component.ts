@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {StockDataService} from "../../services/stock-data.service";
-import {ChartConfiguration, ChartOptions, scales} from 'chart.js';
+import {ChartConfiguration, ChartOptions} from 'chart.js';
 
 @Component({
   selector: 'app-stock-card',
@@ -13,6 +13,9 @@ export class StockCardComponent  implements OnInit {
   @ViewChild('canva') canvasRef: ElementRef | any;
 
   ngOnInit(){
+    this.stockDataService.getAllStocks().subscribe(stocks => {
+      console.log(stocks)
+    })
   }
 
   ngAfterViewInit() {
