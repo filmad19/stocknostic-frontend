@@ -4,10 +4,10 @@ import {ChartConfiguration, ChartOptions} from 'chart.js';
 
 @Component({
   selector: 'app-stock-card',
-  templateUrl: './stock-card.component.html',
-  styleUrls: ['./stock-card.component.scss'],
+  templateUrl: './stock-detail-card.component.html',
+  styleUrls: ['./stock-detail-card.component.scss'],
 })
-export class StockCardComponent  implements OnInit {
+export class StockDetailCardComponent implements OnInit {
   constructor(private stockDataService: StockDataService) {}
 
   @ViewChild('canva') canvasRef: ElementRef | any;

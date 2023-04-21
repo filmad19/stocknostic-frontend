@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { StockCardComponent } from './stock-card.component';
+import { StockListItemComponent } from './stock-list-item.component';
 
-describe('StockCardComponent', () => {
-  let component: StockCardComponent;
-  let fixture: ComponentFixture<StockCardComponent>;
+describe('StockDetailViewComponent', () => {
+  let component: StockListItemComponent;
+  let fixture: ComponentFixture<StockListItemComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StockCardComponent ],
+      declarations: [ StockListItemComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(StockCardComponent);
+    fixture = TestBed.createComponent(StockListItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

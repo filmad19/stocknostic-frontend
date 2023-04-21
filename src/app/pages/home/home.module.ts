@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
-import {StockCardComponent} from "../../components/stock-card/stock-card.component";
+import {StockDetailCardComponent} from "../../components/stock-detail-card/stock-detail-card.component";
 import {NgChartsModule} from "ng2-charts";
 
 @NgModule({
@@ -19,8 +19,8 @@ import {NgChartsModule} from "ng2-charts";
     NgChartsModule
   ],
     exports: [
-        StockCardComponent
+        StockDetailCardComponent
     ],
-    declarations: [HomePage, StockCardComponent]
+    declarations: [HomePage, StockDetailCardComponent]
 })
 export class HomePageModule {}
