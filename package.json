@@ -31,6 +31,7 @@
     "chart.js": "^4.2.1",
     "ionicons": "^6.0.3",
     "ng2-charts": "^4.1.1",
+    "protobufjs": "^7.2.3",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

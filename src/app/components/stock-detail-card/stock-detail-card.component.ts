@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {StockDataService} from "../../services/stock-data.service";
 import {ChartConfiguration, ChartOptions} from 'chart.js';
+import {Interval} from "../../shared/Interval";
 
 @Component({
   selector: 'app-stock-card',
@@ -13,7 +14,7 @@ export class StockDetailCardComponent implements OnInit {
   @ViewChild('canva') canvasRef: ElementRef | any;
 
   ngOnInit(){
-    this.stockDataService.getAllStocks().subscribe(stocks => {
+    this.stockDataService.searchStocks("Appl").subscribe(stocks => {
       console.log(stocks)
     })
   }
@@ -21,16 +22,18 @@ export class StockDetailCardComponent implements OnInit {
   ngAfterViewInit() {
     let ctx = this.canvasRef.nativeElement.getContext('2d');
 
-    this.stockDataService.getStockData('BTCUSDT', "1m").subscribe(response => {
-      this.chartLabels = response.map((entry: any) => entry[0] % 100_000 / 10_000);
-      let data = response.map((entry: any) => entry[1]);
+    this.stockDataService.getStockPriceHistory('AAPL', Interval.listItem).subscribe(response => {
+      this.chartLabels = response.map((entry: any) => entry.timestamp);
+      let data = response.map((entry: any) => entry.close);
+
+      console.log(response)
+
+
+      console.log(this.chartData)
 
       const gradient = ctx.createLinearGradient(0, 0, 0, 450);
       gradient.addColorStop(0, 'rgb(0,255,0)');
       gradient.addColorStop(1, 'rgba(0, 255, 0, 0)');
-
-      console.log(data)
-
 
       this.chartData = [
         {

@@ -13,9 +13,7 @@ export class HomePage implements OnInit {
   constructor(private stockDataService: StockDataService) { }
 
   ngOnInit() {
-    this.stockDataService.getAllStocks().subscribe(stocks => {
-      console.log(stocks)
-    })
+    this.stockDataService.webSocket();
   }
 
 }
