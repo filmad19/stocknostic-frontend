@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-searchbar class="mt-2"></ion-searchbar>
+    <ion-searchbar [debounce]="1000" (ionInput)="searchStock($event)" class="mt-2"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -19,10 +19,7 @@
 <!--    <ion-title>Favourites</ion-title>-->
 <!--  </ion-toolbar>-->
 
-  <div class="align-center" *ngFor="let stock of stocks">
-    <app-stock-list-item>{{stock}}</app-stock-list-item>
+  <div class="align-center" *ngFor="let result of searchResults">
+   <app-stock-list-item [result]="result"></app-stock-list-item>
   </div>
-
-<!--  <app-stock-card></app-stock-card>-->
-
 </ion-content>

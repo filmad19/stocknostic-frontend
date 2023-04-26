@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {StockDataService} from "../../services/stock-data.service";
+import {HttpClient} from "@angular/common/http";
+
+
 
 @Component({
   selector: 'app-home',
@@ -7,13 +10,24 @@ import {StockDataService} from "../../services/stock-data.service";
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
+  searchResults: any = [];
 
-  stocks: number[] = [1, 2, 3, 4, 5, 6, 7];
-
-  constructor(private stockDataService: StockDataService) { }
+  constructor(private stockDataService: StockDataService,private http: HttpClient) { }
 
   ngOnInit() {
     this.stockDataService.webSocket();
   }
 
+
+  searchStock($event: any) {
+    console.log($event.target.value)
+    this.http.get('http://localhost:8080/api/stock/search?q=' + $event.target.value)
+      .subscribe(response => {
+        this.searchResults = response;
+        console.log(this.searchResults)
+      }, error => {
+        console.error(error); // Handle any errors here
+      });
+
+  }
 }

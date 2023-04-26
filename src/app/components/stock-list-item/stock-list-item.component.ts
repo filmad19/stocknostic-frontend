@@ -10,17 +10,28 @@ import { Router } from '@angular/router';
 export class StockListItemComponent implements OnInit {
   icon_style = 'heart-outline'
   @Input() isLiked: boolean = false;
-
+  @Input() result: any;
+  favourites: any = [];
 
   constructor(private router: Router) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+  }
 
   toggleLike() {
     this.isLiked = !this.isLiked;
+    this.result.liked = this.isLiked;
+    if (this.result.liked){
+      this.favourites.push(this.result);
+    }else {
+      this.favourites.splice(this.result);
+    }
+    console.log("favourites" + this.favourites)
+    console.log(this.result)
   }
 
   goToDetailedComponent() {
-    this.router.navigate(['/app-stock-detail-card']);
+    this.router.navigate(['/app-stock-detail-card'], { state: { data: this.result } });
   }
 }

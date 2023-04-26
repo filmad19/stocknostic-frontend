@@ -9,12 +9,19 @@ import {Router} from "@angular/router";
   templateUrl: './stock-detail-card.component.html',
   styleUrls: ['./stock-detail-card.component.scss'],
 })
+
 export class StockDetailCardComponent implements OnInit {
   constructor(private stockDataService: StockDataService, private router: Router) {}
+  result: any;
+  favourites: any = [];
 
   @ViewChild('canva') canvasRef: ElementRef | any;
-  @Input() isLiked: boolean = false;
+  isLiked: boolean = false;
+
   ngOnInit(){
+    this.result = history.state.data;
+    this.isLiked = this.result.liked;
+    console.log("detailed: " + this.result)
     this.stockDataService.searchStocks("Appl").subscribe(stocks => {
       console.log(stocks)
     })
@@ -104,5 +111,13 @@ export class StockDetailCardComponent implements OnInit {
 
   toggleLike() {
     this.isLiked = !this.isLiked;
+    this.result.liked = this.isLiked;
+    if (this.result.liked){
+      this.favourites.push(this.result);
+    }else {
+      this.favourites.splice(this.result);
+    }
+    console.log("favourites" + this.favourites)
+    console.log(this.result)
   }
 }
