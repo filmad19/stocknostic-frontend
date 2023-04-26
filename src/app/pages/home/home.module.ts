@@ -9,6 +9,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 import {StockDetailCardComponent} from "../../components/stock-detail-card/stock-detail-card.component";
 import {NgChartsModule} from "ng2-charts";
+import {StockListItemComponent} from "../../components/stock-list-item/stock-list-item.component";
 
 @NgModule({
   imports: [
@@ -21,6 +22,6 @@ import {NgChartsModule} from "ng2-charts";
     exports: [
         StockDetailCardComponent
     ],
-    declarations: [HomePage, StockDetailCardComponent]
+    declarations: [HomePage, StockDetailCardComponent, StockListItemComponent]
 })
 export class HomePageModule {}

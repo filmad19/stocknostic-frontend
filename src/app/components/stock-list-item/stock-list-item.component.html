@@ -1,3 +1,19 @@
-<div>
-  TEST
-</div>
+<ion-card>
+  <ion-card-content class="p-x-1 py-1">
+  <div (click)="goToDetailedComponent()" class="flex-row items-center">
+    <ion-button fill="clear" (click)="toggleLike()" class="heart-button">
+      <ion-icon [name]="isLiked ? 'heart' : 'heart-outline'"></ion-icon>
+    </ion-button>
+    <div class="flex-column ion-float-left" >
+      <ion-card-title class="text-lg">AAPL</ion-card-title>
+      <ion-card-subtitle>Apple Inc.</ion-card-subtitle>
+    </div>
+    <div class="ml-auto">
+      <div class="font-bold text-white text-lg text-right">€100.53</div>
+      <div class="text-red-700 font-bold text-right">-8.0%</div>
+    </div>
+  </div>
+  </ion-card-content>
+
+</ion-card>
+

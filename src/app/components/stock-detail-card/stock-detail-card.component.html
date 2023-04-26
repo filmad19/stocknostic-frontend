@@ -1,19 +1,25 @@
-<ion-card>
-  <ion-toolbar>
-  <ion-buttons slot="primary">
-    <ion-button>
-      <ion-icon size="small" name="ellipsis-vertical-outline"></ion-icon>
-    </ion-button>
-    <ion-button>
-      <ion-icon  size="small" name="heart-outline"></ion-icon>
-    </ion-button>
-  </ion-buttons>
 
-    <ion-button fill="clear" size="large">Stock</ion-button>
+  <ion-card>
 
-    <ion-card-subtitle class="pl-6">Stock Inc. (<span class="text-red-700 font-bold">-8.0%</span>) </ion-card-subtitle>
+    <ion-toolbar>
+      <div  class="flex-row items-center">
+        <ion-button (click)="goBack()" fill="clear" >
+          <ion-icon name="arrow-back-outline"></ion-icon>
+        </ion-button>
+        <div class="flex-column ion-float-left" >
+          <ion-card-title class="text-lg">AAPL</ion-card-title>
+          <ion-card-subtitle>Apple Inc.</ion-card-subtitle>
+        </div>
+        <div class="ml-auto" >
+            <ion-button (click)="toggleLike()" slot="end" fill="clear" size="large">
 
-  </ion-toolbar>
+                <ion-icon [name]="isLiked ? 'heart' : 'heart-outline'" size="large"></ion-icon>
+
+            </ion-button>
+        </div>
+      </div>
+
+    </ion-toolbar>
 
   <div class="w-full flex justify-center chart-wrapper">
     <canvas baseChart #canva
@@ -30,7 +36,6 @@
   <ion-card-content>
     <div class="flex flex-row items-center">
       <ion-button slot="start" fill="outline">Indicators</ion-button>
-
       <div class="ml-auto border-2 border-blue-600 rounded-lg p-3">
         <h3>Price: <span class="font-bold">100.53 EUR</span></h3>
       </div>

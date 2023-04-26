@@ -1,18 +1,19 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {StockDataService} from "../../services/stock-data.service";
 import {ChartConfiguration, ChartOptions} from 'chart.js';
 import {Interval} from "../../shared/Interval";
+import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-stock-card',
+  selector: 'app-stock-detail-card',
   templateUrl: './stock-detail-card.component.html',
   styleUrls: ['./stock-detail-card.component.scss'],
 })
 export class StockDetailCardComponent implements OnInit {
-  constructor(private stockDataService: StockDataService) {}
+  constructor(private stockDataService: StockDataService, private router: Router) {}
 
   @ViewChild('canva') canvasRef: ElementRef | any;
-
+  @Input() isLiked: boolean = false;
   ngOnInit(){
     this.stockDataService.searchStocks("Appl").subscribe(stocks => {
       console.log(stocks)
@@ -96,4 +97,12 @@ export class StockDetailCardComponent implements OnInit {
       }
     },
   };
+
+  goBack() {
+    this.router.navigate(['./']);
+  }
+
+  toggleLike() {
+    this.isLiked = !this.isLiked;
+  }
 }

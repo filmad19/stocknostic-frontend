@@ -19,10 +19,10 @@
 <!--    <ion-title>Favourites</ion-title>-->
 <!--  </ion-toolbar>-->
 
-  <li *ngFor="let stock of stocks">
-    {{stock}}
-  </li>
+  <div class="align-center" *ngFor="let stock of stocks">
+    <app-stock-list-item>{{stock}}</app-stock-list-item>
+  </div>
 
-  <app-stock-card></app-stock-card>
+<!--  <app-stock-card></app-stock-card>-->
 
 </ion-content>
