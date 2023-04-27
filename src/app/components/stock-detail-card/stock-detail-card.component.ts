@@ -1,8 +1,11 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {StockDataService} from "../../services/stock-data.service";
 import {ChartConfiguration, ChartOptions} from 'chart.js';
 import {Interval} from "../../shared/Interval";
 import {Router} from "@angular/router";
+import {Stock} from "../../shared/Stock";
+import {PricePoint} from "../../shared/PricePoint";
+import {ModalController} from "@ionic/angular";
 
 @Component({
   selector: 'app-stock-detail-card',
@@ -11,33 +14,25 @@ import {Router} from "@angular/router";
 })
 
 export class StockDetailCardComponent implements OnInit {
-  constructor(private stockDataService: StockDataService, private router: Router) {}
-  result: any;
+  constructor(private stockDataService: StockDataService,
+              private router: Router,
+              private modalCtrl: ModalController) {}
+
+  stock: Stock | any;
   favourites: any = [];
 
   @ViewChild('canva') canvasRef: ElementRef | any;
-  isLiked: boolean = false;
 
   ngOnInit(){
-    this.result = history.state.data;
-    this.isLiked = this.result.liked;
-    console.log("detailed: " + this.result)
-    this.stockDataService.searchStocks("Appl").subscribe(stocks => {
-      console.log(stocks)
-    })
+    this.stock = history.state.data;
   }
 
   ngAfterViewInit() {
     let ctx = this.canvasRef.nativeElement.getContext('2d');
 
-    this.stockDataService.getStockPriceHistory('AAPL', Interval.listItem).subscribe(response => {
-      this.chartLabels = response.map((entry: any) => entry.timestamp);
-      let data = response.map((entry: any) => entry.close);
-
-      console.log(response)
-
-
-      console.log(this.chartData)
+    this.stockDataService.getStockPriceHistory(this.stock.symbol, Interval.week).subscribe(response => {
+      this.chartLabels = response.map((entry: PricePoint) => entry.timestamp);
+      let data = response.map((entry: PricePoint) => entry.close);
 
       const gradient = ctx.createLinearGradient(0, 0, 0, 450);
       gradient.addColorStop(0, 'rgb(0,255,0)');
@@ -107,17 +102,19 @@ export class StockDetailCardComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['./']);
+    // return this.modalCtrl.dismiss(this.stock.liked, 'confirm');
+
   }
 
   toggleLike() {
-    this.isLiked = !this.isLiked;
-    this.result.liked = this.isLiked;
-    if (this.result.liked){
-      this.favourites.push(this.result);
+    this.stock.liked = !this.stock.liked;
+
+    if (this.stock.liked){
+      this.favourites.push(this.stock);
     }else {
-      this.favourites.splice(this.result);
+      this.favourites.splice(this.stock);
     }
     console.log("favourites" + this.favourites)
-    console.log(this.result)
+    console.log(this.stock)
   }
 }

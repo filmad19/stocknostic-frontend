@@ -1,25 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-searchbar [debounce]="1000" (ionInput)="searchStock($event)" class="mt-2"></ion-searchbar>
+    <ion-searchbar show-cancel-button="focus" animated (ionInput)="searchStock($event)" (ionClear)="displayFavourites()" class="mt-2"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-<!--  <ion-toolbar>-->
-<!--    <ion-buttons slot="primary">-->
-<!--      <ion-button>-->
-<!--        <ion-icon name="search-outline"></ion-icon>-->
-<!--      </ion-button>-->
-<!--    </ion-buttons>-->
-<!--    <ion-buttons slot="secondary">-->
-<!--      <ion-button>-->
-<!--        <ion-icon name="menu-outline"></ion-icon>-->
-<!--      </ion-button>-->
-<!--    </ion-buttons>-->
-<!--    <ion-title>Favourites</ion-title>-->
-<!--  </ion-toolbar>-->
-
-  <div class="align-center" *ngFor="let result of searchResults">
-   <app-stock-list-item [result]="result"></app-stock-list-item>
+  <div *ngFor="let result of searchResults">
+    <app-stock-list-item [stock]="result"></app-stock-list-item>
   </div>
 </ion-content>

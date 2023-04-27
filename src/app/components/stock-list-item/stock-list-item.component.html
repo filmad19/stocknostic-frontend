@@ -1,19 +1,18 @@
 <ion-card>
   <ion-card-content class="p-x-1 py-1">
   <div class="flex-row items-center">
-    <ion-button fill="clear" (click)="toggleLike()" class="heart-button">
-      <ion-icon [name]="isLiked ? 'heart' : 'heart-outline'"></ion-icon>
+    <ion-button fill="clear" (click)="toggleLike(); $event.stopPropagation()" class="heart-button">
+      <ion-icon [name]="this.stock.liked ? 'heart' : 'heart-outline'"></ion-icon>
     </ion-button>
     <div (click)="goToDetailedComponent()" class="flex-column ion-float-left" >
-      <ion-card-title class="text-lg">{{result.symbol}}</ion-card-title>
-      <ion-card-subtitle>{{result.companyName}}</ion-card-subtitle>
+      <ion-card-title class="text-lg">{{stock.symbol}}</ion-card-title>
+      <ion-card-subtitle>{{stock.companyName}}</ion-card-subtitle>
     </div>
     <div class="ml-auto">
-      <div class="font-bold text-white text-lg text-right">${{result.previousClosePrice}}</div>
+      <div class="font-bold text-white text-lg text-right">${{stock.previousClosePrice}}</div>
       <div class="text-red-700 font-bold text-right">-8.0%</div>
     </div>
   </div>
   </ion-card-content>
-
 </ion-card>
 

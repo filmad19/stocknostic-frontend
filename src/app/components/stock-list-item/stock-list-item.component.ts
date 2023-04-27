@@ -1,5 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
+import {Stock} from "../../shared/Stock";
+import {ModalController} from "@ionic/angular";
+import {StockDetailCardComponent} from "../stock-detail-card/stock-detail-card.component";
+
 @Component({
   selector: 'app-stock-list-item',
   templateUrl: './stock-list-item.component.html',
@@ -8,30 +12,35 @@ import { Router } from '@angular/router';
 })
 
 export class StockListItemComponent implements OnInit {
-  icon_style = 'heart-outline'
-  @Input() isLiked: boolean = false;
-  @Input() result: any;
-  favourites: any = [];
+  @Input() stock: Stock | any;
+  favourites: Stock[] = [];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private modalCtrl: ModalController) { }
 
   ngOnInit() {
 
   }
 
   toggleLike() {
-    this.isLiked = !this.isLiked;
-    this.result.liked = this.isLiked;
-    if (this.result.liked){
-      this.favourites.push(this.result);
+    this.stock.liked = !this.stock.liked;
+
+    if (this.stock.liked){
+      this.favourites.push(this.stock);
     }else {
-      this.favourites.splice(this.result);
+      this.favourites.splice(this.stock);
     }
-    console.log("favourites" + this.favourites)
-    console.log(this.result)
   }
 
-  goToDetailedComponent() {
-    this.router.navigate(['/app-stock-detail-card'], { state: { data: this.result } });
+  async goToDetailedComponent() {
+    this.router.navigate(['/app-stock-detail-card'], { state: { data: this.stock } });
+
+  //   const modal = await this.modalCtrl.create({
+  //     component: StockDetailCardComponent,
+  //   });
+  //
+  //   modal.present();
+  //
+  //   const { data, role } = await modal.onWillDismiss();
   }
 }

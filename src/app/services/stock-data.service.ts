@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import * as protobuf from "protobufjs";
+import {Stock} from "../shared/Stock";
+import {PricePoint} from "../shared/PricePoint";
 
 const {Buffer} = require("buffer/")
 
@@ -47,15 +49,15 @@ export class StockDataService {
   searchStocks(searchString: string){
     let params = new HttpParams().set("q", searchString);
 
-    return this.http.get<any> (
+    return this.http.get<Stock[]> (
       environment.apiPath + "/stock/search", {params}
     )
   }
 
   getStockPriceHistory(symbol: string, interval: { interval: string, range: string }) {
-    // /stock/history/AAPL?interval=1h&range=5d"
     let params = new HttpParams().set("interval", interval.interval).set("range", interval.range);
-    return this.http.get<any>(
+
+    return this.http.get<PricePoint[]>(
       environment.apiPath + "/stock/history/" + symbol, {params}
     );
   }
