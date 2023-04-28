@@ -16,7 +16,8 @@ import {ModalController} from "@ionic/angular";
 export class StockDetailCardComponent implements OnInit {
   constructor(private stockDataService: StockDataService,
               private router: Router,
-              private modalCtrl: ModalController) {}
+              private modalCtrl: ModalController,
+              private modalController: ModalController) {}
 
   stock: Stock | any;
   favourites: any = [];
@@ -24,7 +25,7 @@ export class StockDetailCardComponent implements OnInit {
   @ViewChild('canva') canvasRef: ElementRef | any;
 
   ngOnInit(){
-    this.stock = history.state.data;
+    console.log("DETAILED \n" + this.stock);
   }
 
   ngAfterViewInit() {
@@ -100,10 +101,13 @@ export class StockDetailCardComponent implements OnInit {
     },
   };
 
-  goBack() {
-    this.router.navigate(['./']);
-    // return this.modalCtrl.dismiss(this.stock.liked, 'confirm');
-
+  // goBack() {
+  //   this.router.navigate(['./']);
+  //   // return this.modalCtrl.dismiss(this.stock.liked, 'confirm');
+  //
+  // }
+  dismissModal() {
+    this.modalController.dismiss();
   }
 
   toggleLike() {

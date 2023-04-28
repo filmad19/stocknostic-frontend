@@ -16,7 +16,7 @@ export class StockListItemComponent implements OnInit {
   favourites: Stock[] = [];
 
   constructor(private router: Router,
-              private modalCtrl: ModalController) { }
+              private modalController: ModalController ) { }
 
   ngOnInit() {
 
@@ -32,15 +32,26 @@ export class StockListItemComponent implements OnInit {
     }
   }
 
-  async goToDetailedComponent() {
-    this.router.navigate(['/app-stock-detail-card'], { state: { data: this.stock } });
+  // async goToDetailedComponent() {
+  //   this.router.navigate(['/app-stock-detail-card'], { state: { data: this.stock } });
+  //
+  // //   const modal = await this.modalCtrl.create({
+  // //     component: StockDetailCardComponent,
+  // //   });
+  // //
+  // //   modal.present();
+  // //
+  // //   const { data, role } = await modal.onWillDismiss();
+  // }
 
-  //   const modal = await this.modalCtrl.create({
-  //     component: StockDetailCardComponent,
-  //   });
-  //
-  //   modal.present();
-  //
-  //   const { data, role } = await modal.onWillDismiss();
+  async openModal() {
+    console.log(this.stock)
+    const modal = await this.modalController.create({
+      component: StockDetailCardComponent,
+      componentProps: {
+        stock: this.stock
+      }
+    });
+    return await modal.present();
   }
 }

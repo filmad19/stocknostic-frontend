@@ -4,7 +4,7 @@
     <ion-button fill="clear" (click)="toggleLike(); $event.stopPropagation()" class="heart-button">
       <ion-icon [name]="this.stock.liked ? 'heart' : 'heart-outline'"></ion-icon>
     </ion-button>
-    <div (click)="goToDetailedComponent()" class="flex-column ion-float-left" >
+    <div fill="clear" id="open-modal" expand="block" (click)="openModal()" class="flex-column ion-float-left" >
       <ion-card-title class="text-lg">{{stock.symbol}}</ion-card-title>
       <ion-card-subtitle>{{stock.companyName}}</ion-card-subtitle>
     </div>
