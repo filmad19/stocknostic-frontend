@@ -20,7 +20,6 @@ export class StockDetailCardComponent implements OnInit {
               private modalController: ModalController) {}
 
   stock: Stock | any;
-  favourites: any = [];
 
   @ViewChild('canva') canvasRef: ElementRef | any;
 
@@ -101,24 +100,12 @@ export class StockDetailCardComponent implements OnInit {
     },
   };
 
-  // goBack() {
-  //   this.router.navigate(['./']);
-  //   // return this.modalCtrl.dismiss(this.stock.liked, 'confirm');
-  //
-  // }
   dismissModal() {
     this.modalController.dismiss();
   }
 
   toggleLike() {
+    this.stockDataService.toggleLiked(this.stock);
     this.stock.liked = !this.stock.liked;
-
-    if (this.stock.liked){
-      this.favourites.push(this.stock);
-    }else {
-      this.favourites.splice(this.stock);
-    }
-    console.log("favourites" + this.favourites)
-    console.log(this.stock)
   }
 }
