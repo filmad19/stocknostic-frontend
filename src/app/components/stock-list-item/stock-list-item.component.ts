@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import {Stock} from "../../shared/Stock";
 import {ModalController} from "@ionic/angular";
 import {StockDetailCardComponent} from "../stock-detail-card/stock-detail-card.component";
+import {StockDataService} from "../../services/stock-data.service";
 
 @Component({
   selector: 'app-stock-list-item',
@@ -13,36 +14,19 @@ import {StockDetailCardComponent} from "../stock-detail-card/stock-detail-card.c
 
 export class StockListItemComponent implements OnInit {
   @Input() stock: Stock | any;
-  favourites: Stock[] = [];
 
   constructor(private router: Router,
-              private modalController: ModalController ) { }
+              private modalController: ModalController,
+              private stockDataService: StockDataService, ) { }
 
   ngOnInit() {
 
   }
 
   toggleLike() {
+    this.stockDataService.toggleLiked(this.stock);
     this.stock.liked = !this.stock.liked;
-
-    if (this.stock.liked){
-      this.favourites.push(this.stock);
-    }else {
-      this.favourites.splice(this.stock);
-    }
   }
-
-  // async goToDetailedComponent() {
-  //   this.router.navigate(['/app-stock-detail-card'], { state: { data: this.stock } });
-  //
-  // //   const modal = await this.modalCtrl.create({
-  // //     component: StockDetailCardComponent,
-  // //   });
-  // //
-  // //   modal.present();
-  // //
-  // //   const { data, role } = await modal.onWillDismiss();
-  // }
 
   async openModal() {
     console.log(this.stock)

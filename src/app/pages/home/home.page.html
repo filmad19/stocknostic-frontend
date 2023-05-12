@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div *ngFor="let result of searchResults">
-    <app-stock-list-item [stock]="result"></app-stock-list-item>
+  <div *ngFor="let stock of stockList">
+    <app-stock-list-item [stock]="stock"></app-stock-list-item>
   </div>
 </ion-content>
