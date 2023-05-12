@@ -18,8 +18,18 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     // this.stockDataService.webSocket();
-    this.userService.login()
-    this.displayFavourites();
+
+    const access_token = localStorage.getItem('access_token');
+
+    if (access_token == null || access_token == "null") {
+      this.userService.fetchAccessToken().subscribe(token => {
+        localStorage.setItem('access_token', token.value);
+        this.displayFavourites();
+        return;
+      })
+    } else {
+      this.displayFavourites();
+    }
   }
 
   searchStock($event: any) {
