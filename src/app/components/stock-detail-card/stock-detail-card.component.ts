@@ -20,11 +20,16 @@ export class StockDetailCardComponent implements OnInit {
               private modalController: ModalController) {}
 
   stock: Stock | any;
+  recommendation: string | any;
 
   @ViewChild('canva') canvasRef: ElementRef | any;
 
   ngOnInit(){
-    console.log("DETAILED \n" + this.stock);
+    this.stockDataService.getRsi(this.stock.symbol).subscribe(response => {
+      if(response != undefined) {
+        this.recommendation = response.rsi;
+      }
+    });
   }
 
   ngAfterViewInit() {

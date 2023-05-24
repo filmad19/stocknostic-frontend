@@ -75,32 +75,23 @@ export class StockDataService {
     )
   }
 
-  toggleLiked(stock: Stock){
-    if(stock.liked){
-      this.removeStockFromFavourite(stock.symbol).subscribe(response => {
-        console.log(response)
-      })
-    } else if(!stock.liked){
-      this.addStockToFavourite(stock.symbol).subscribe(response => {
-        console.log(response)
-      })
-    }
-  }
 
-  private addStockToFavourite(stockSymbol: string){
+
+  // getRecommendation(symbol: string){
+  //   let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());
+  //   let params = new HttpParams().set("symbol", symbol);
+  //
+  //   return this.http.get<String> (
+  //     environment.apiPath + "/indicator/recommendation",{params, headers}
+  //   )
+  // }
+
+  getRsi(symbol: string){
     let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());
+    let params = new HttpParams().set("symbol", symbol);
 
-    return this.http.post<Stock[]> (
-      environment.apiPath + "/favourite", {stockSymbol}, {headers}
-    )
-  }
-
-  private removeStockFromFavourite(stockSymbol: string){
-    let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());
-    let params = new HttpParams().set("symbol", stockSymbol);
-
-    return this.http.delete<Stock[]> (
-      environment.apiPath + "/favourite", {params, headers}
+    return this.http.get<PricePoint> (
+      environment.apiPath + "/indicator/rsi",{params, headers}
     )
   }
 }
