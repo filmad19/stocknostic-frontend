@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import {Stock} from "../../shared/Stock";
 import {ModalController} from "@ionic/angular";
 import {StockDetailCardComponent} from "../stock-detail-card/stock-detail-card.component";
-import {StockDataService} from "../../services/stock-data.service";
+import {FavouriteService} from "../../services/favourite.service";
 
 @Component({
   selector: 'app-stock-list-item',
@@ -17,14 +17,14 @@ export class StockListItemComponent implements OnInit {
 
   constructor(private router: Router,
               private modalController: ModalController,
-              private stockDataService: StockDataService, ) { }
+              private favouriteService: FavouriteService) { }
 
   ngOnInit() {
 
   }
 
   toggleLike() {
-    this.stockDataService.toggleLiked(this.stock);
+    this.favouriteService.toggleLiked(this.stock);
     this.stock.liked = !this.stock.liked;
   }
 

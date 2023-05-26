@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import {Stock} from "../../shared/Stock";
 import {PricePoint} from "../../shared/PricePoint";
 import {ModalController} from "@ionic/angular";
+import {FavouriteService} from "../../services/favourite.service";
 
 @Component({
   selector: 'app-stock-detail-card',
@@ -17,7 +18,8 @@ export class StockDetailCardComponent implements OnInit {
   constructor(private stockDataService: StockDataService,
               private router: Router,
               private modalCtrl: ModalController,
-              private modalController: ModalController) {}
+              private modalController: ModalController,
+              private favouriteService: FavouriteService) {}
 
   stock: Stock | any;
   recommendation: string | any;
@@ -26,8 +28,13 @@ export class StockDetailCardComponent implements OnInit {
 
   ngOnInit(){
     this.stockDataService.getRsi(this.stock.symbol).subscribe(response => {
-      if(response != undefined) {
-        this.recommendation = response.rsi;
+      this.recommendation = response.rsi.toFixed(2);
+      if (this.recommendation < 30){
+        this.recommendation += "  (buy)"
+      }else if (this.recommendation > 70){
+        this.recommendation += "  (sell)"
+      }else {
+        this.recommendation += "  (hold)"
       }
     });
   }
@@ -110,7 +117,7 @@ export class StockDetailCardComponent implements OnInit {
   }
 
   toggleLike() {
-    this.stockDataService.toggleLiked(this.stock);
+    this.favouriteService.toggleLiked(this.stock);
     this.stock.liked = !this.stock.liked;
   }
 }
