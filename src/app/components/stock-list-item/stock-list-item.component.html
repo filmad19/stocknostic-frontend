@@ -2,7 +2,7 @@
   <ion-card-content class="p-x-1 py-1">
   <div class="flex-row items-center">
     <ion-button fill="clear" (click)="toggleLike(); $event.stopPropagation()" class="heart-button">
-      <ion-icon [name]="this.stock.liked ? 'heart' : 'heart-outline'"></ion-icon>
+      <ion-icon color="dark" [name]="this.stock.liked ? 'heart' : 'heart-outline'"></ion-icon>
     </ion-button>
     <div fill="clear" id="open-modal" expand="block"  class="flex-column ion-float-left" >
       <ion-card-title class="text-lg">{{stock.symbol}}</ion-card-title>

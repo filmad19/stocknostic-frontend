@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-searchbar show-cancel-button="focus" animated (ionInput)="searchStock($event)" (ionClear)="displayFavourites()" class="mt-2"></ion-searchbar>
+    <ion-searchbar show-cancel-button="focus" animated debounce="200" (ionChange)="searchStock($event)" (ionClear)="searchStock($event)" class="mt-2"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
