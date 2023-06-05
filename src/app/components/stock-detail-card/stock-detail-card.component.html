@@ -7,7 +7,7 @@
       </ion-button>
       <div class="ml-auto" >
         <ion-button (click)="toggleLike()" slot="end" fill="clear" size="large">
-          <ion-icon [name]="this.stock.liked ? 'heart' : 'heart-outline'" size="large"></ion-icon>
+          <ion-icon class="text-red-600" [name]="this.stock.liked ? 'heart' : 'heart-outline'" size="large"></ion-icon>
         </ion-button>
       </div>
     </div>
@@ -20,20 +20,25 @@
     </div>
     <div class="flex-column font-bold ion-float-right ml-6" >
       <ion-card-title class="text-lg">{{stock.previousClosePrice}} {{stock.currency}}</ion-card-title>
-      <ion-card-subtitle class="text-green-500">+8.0%</ion-card-subtitle>
+      <ion-card-subtitle class="{{percentageStyle}}">{{stockPercentageGain}}%</ion-card-subtitle>
     </div>
   </div>
-  <div class="flex flex-row items-center w-full">
-      <ion-button class="m-auto" size="small" slot="start" fill="outline">1H</ion-button>
-      <ion-button class="m-auto" size="small" slot="start" fill="outline">1D</ion-button>
-      <ion-button class="m-auto" size="small" slot="start" fill="outline">1W</ion-button>
-      <ion-button class="m-auto" size="small" slot="start" fill="outline">1M</ion-button>
-      <ion-button class="m-auto" size="small" slot="start" fill="outline">3M</ion-button>
-      <ion-button class="m-auto" size="small" slot="start" fill="outline">1Y</ion-button>
-      <ion-button class="m-auto" size="small" slot="start" fill="outline">5Y</ion-button>
+
+  <div class="mb-2 flex flex-row items-center w-full">
+      <ion-button (click)="interval('day')" class="m-auto" size="small" slot="start" fill="outline">1D</ion-button>
+      <ion-button (click)="interval('week')" class="m-auto" size="small" slot="start" fill="outline">1W</ion-button>
+      <ion-button (click)="interval('month')" class="m-auto" size="small" slot="start" fill="outline">1M</ion-button>
+      <ion-button (click)="interval('month3')" class="m-auto" size="small" slot="start" fill="outline">3M</ion-button>
+      <ion-button (click)="interval('year')" class="m-auto" size="small" slot="start" fill="outline">1Y</ion-button>
+      <ion-button (click)="interval('year5')" class="m-auto" size="small" slot="start" fill="outline">5Y</ion-button>
+      <ion-button (click)="interval('year20')" class="m-auto" size="small" slot="start" fill="outline">20Y</ion-button>
   </div>
 
-  <div class="mt-3 w-full flex justify-center chart-wrapper">
+  <div class="{{divDateStyle}}">
+    <span>{{date}}</span>
+  </div>
+
+  <div class=" w-full flex justify-center chart-wrapper">
     <canvas baseChart #canva
             [type]="'line'"
             [datasets]="chartData"

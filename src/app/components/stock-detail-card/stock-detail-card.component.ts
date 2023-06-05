@@ -15,6 +15,13 @@ import {FavouriteService} from "../../services/favourite.service";
 })
 
 export class StockDetailCardComponent implements OnInit {
+  currentInterval = Interval.week;
+  percentageStyle: string = '';
+  date: string = '';
+  showDate = false;
+  divDateStyle = 'flex flex-row justify-center invisible'
+  unformattedLabel = [];
+
   constructor(private stockDataService: StockDataService,
               private router: Router,
               private modalCtrl: ModalController,
@@ -23,6 +30,8 @@ export class StockDetailCardComponent implements OnInit {
 
   stock: Stock | any;
   recommendation: string | any;
+  stockPercentageGain: string | any;
+
 
   @ViewChild('canva') canvasRef: ElementRef | any;
 
@@ -42,10 +51,17 @@ export class StockDetailCardComponent implements OnInit {
   ngAfterViewInit() {
     let ctx = this.canvasRef.nativeElement.getContext('2d');
 
-    this.stockDataService.getStockPriceHistory(this.stock.symbol, Interval.week).subscribe(response => {
+    this.stockDataService.getStockPriceHistory(this.stock.symbol, this.currentInterval).subscribe(response => {
       this.chartLabels = response.map((entry: PricePoint) => entry.timestamp);
-      let data = response.map((entry: PricePoint) => entry.close);
 
+      if (this.currentInterval != Interval.day) {
+        this.formatLabels(false);
+      }else {
+        this.formatLabels(true);
+      }
+
+      let data = response.map((entry: PricePoint) => entry.close);
+      this.calcPercentage(data)
       const gradient = ctx.createLinearGradient(0, 0, 0, 450);
       gradient.addColorStop(0, 'rgb(0,255,0)');
       gradient.addColorStop(1, 'rgba(0, 255, 0, 0)');
@@ -119,5 +135,87 @@ export class StockDetailCardComponent implements OnInit {
   toggleLike() {
     this.favouriteService.toggleLiked(this.stock);
     this.stock.liked = !this.stock.liked;
+  }
+
+  interval(interval: string){
+    switch (interval){
+      case 'week': this.currentInterval = Interval.week;
+        this.showDate = false;
+        break;
+
+      case 'month': this.currentInterval = Interval.month;
+        this.showDate = false;
+        break;
+
+      case 'month3': this.currentInterval = Interval.month3;
+        this.showDate = false;
+        break;
+
+      case 'year': this.currentInterval = Interval.year;
+        this.showDate = false;
+        break;
+
+      case 'year5': this.currentInterval = Interval.year5;
+        this.showDate = false;
+        break;
+
+      case 'year20': this.currentInterval = Interval.year20;
+        this.showDate = false;
+        break;
+
+      default: this.currentInterval = Interval.day;
+        this.showDate = true;
+        break;
+    }
+
+    if (this.showDate){
+      this.divDateStyle = 'flex flex-row justify-center visible'
+    }else {
+      this.divDateStyle = 'flex flex-row justify-center invisible'
+    }
+    this.ngAfterViewInit()
+
+  }
+
+  formatLabels(day: boolean){
+    const formattedLabels: string[] = [];
+    let index: number;
+    this.unformattedLabel = this.chartLabels;
+
+    if (!day){
+      index = 0;
+    }else {
+      index = 1;
+    }
+
+    for (const label of this.chartLabels) {
+      const formattedLabel = label.split("T")[index];
+      this.date = label.split("T")[0];
+      formattedLabels.push(formattedLabel);
+    }
+
+
+    this.chartLabels = formattedLabels;
+  }
+
+
+  calcPercentage(data:any){
+    console.log("Unformatted Label: ", this.unformattedLabel)
+    console.log("All Data:  ", data)
+    console.log("Last Price: ", data[0])
+    console.log("current Price: ", data[data.length - 1])
+
+    let difference: number = (data[data.length - 1] - data[0]);
+    let percent: number =  (difference / data[0] ) * 100;
+    this.stockPercentageGain = percent.toFixed(3);
+
+
+    this.stock.previousClosePrice = data[data.length - 1].toFixed(2);
+
+    if (percent < 0){
+      this.percentageStyle = 'text-red-700'
+    }else {
+      this.percentageStyle = 'text-green-500'
+    }
   }
 }
