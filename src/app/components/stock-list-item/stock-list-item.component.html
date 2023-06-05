@@ -1,4 +1,4 @@
-<ion-card (click)="openModal()">
+<ion-card class="ion-text-wrap h-auto m-3" (click)="openModal()">
   <ion-card-content class="p-x-1 py-1">
   <div class="flex-row items-center">
     <ion-button fill="clear" (click)="toggleLike(); $event.stopPropagation()" class="heart-button">
@@ -10,7 +10,7 @@
     </div>
     <div class="ml-auto">
       <div class="font-bold text-white text-lg text-right">${{stock.previousClosePrice}}</div>
-      <div class="text-red-700 font-bold text-right">-8.0%</div>
+      <div class="{{this.percentageStyle}}">{{this.stockPercentageGain}}%</div>
     </div>
   </div>
   </ion-card-content>
