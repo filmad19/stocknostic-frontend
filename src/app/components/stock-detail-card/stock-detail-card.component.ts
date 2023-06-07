@@ -15,12 +15,20 @@ import {FavouriteService} from "../../services/favourite.service";
 })
 
 export class StockDetailCardComponent implements OnInit {
-  currentInterval = Interval.week;
+  currentInterval = Interval.day;
   percentageStyle: string = '';
   date: string = '';
   showDate = false;
   divDateStyle = 'flex flex-row justify-center invisible'
   unformattedLabel = [];
+  button1 = 'solid'
+  button2 = 'outline'
+  button3 = 'outline'
+  button4 = 'outline'
+  button5 = 'outline'
+  button6 = 'outline'
+  button7 = 'outline'
+
 
   constructor(private stockDataService: StockDataService,
               private router: Router,
@@ -141,30 +149,79 @@ export class StockDetailCardComponent implements OnInit {
     switch (interval){
       case 'week': this.currentInterval = Interval.week;
         this.showDate = false;
+        this.button1 = 'outline'
+        this.button2 = 'solid'
+        this.button3 = 'outline'
+        this. button4 = 'outline'
+        this.button5 = 'outline'
+        this.button6 = 'outline'
+        this.button7 = 'outline'
         break;
 
       case 'month': this.currentInterval = Interval.month;
         this.showDate = false;
+        this.button1 = 'outline'
+        this.button2 = 'outline'
+        this.button3 = 'solid'
+        this. button4 = 'outline'
+        this.button5 = 'outline'
+        this.button6 = 'outline'
+        this.button7 = 'outline'
         break;
 
       case 'month3': this.currentInterval = Interval.month3;
         this.showDate = false;
+        this.button1 = 'outline'
+        this.button2 = 'outline'
+        this.button3 = 'outline'
+        this. button4 = 'solid'
+        this.button5 = 'outline'
+        this.button6 = 'outline'
+        this.button7 = 'outline'
         break;
 
       case 'year': this.currentInterval = Interval.year;
         this.showDate = false;
+        this.button1 = 'outline'
+        this.button2 = 'outline'
+        this.button3 = 'outline'
+        this. button4 = 'outline'
+        this.button5 = 'solid'
+        this.button6 = 'outline'
+        this.button7 = 'outline'
         break;
 
       case 'year5': this.currentInterval = Interval.year5;
         this.showDate = false;
+        this.button1 = 'outline'
+        this.button2 = 'outline'
+        this.button3 = 'outline'
+        this. button4 = 'outline'
+        this.button5 = 'outline'
+        this.button6 = 'solid'
+        this.button7 = 'outline'
         break;
 
       case 'year20': this.currentInterval = Interval.year20;
         this.showDate = false;
+        this.button1 = 'outline'
+        this.button2 = 'outline'
+        this.button3 = 'outline'
+        this. button4 = 'outline'
+        this.button5 = 'outline'
+        this.button6 = 'outline'
+        this.button7 = 'solid'
         break;
 
       default: this.currentInterval = Interval.day;
         this.showDate = true;
+        this.button1 = 'solid'
+        this.button2 = 'outline'
+        this.button3 = 'outline'
+        this. button4 = 'outline'
+        this.button5 = 'outline'
+        this.button6 = 'outline'
+        this.button7 = 'outline'
         break;
     }
 

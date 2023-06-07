@@ -25,13 +25,13 @@
   </div>
 
   <div class="mb-2 flex flex-row items-center w-full">
-      <ion-button (click)="interval('day')" class="m-auto" size="small" slot="start" fill="outline">1D</ion-button>
-      <ion-button (click)="interval('week')" class="m-auto" size="small" slot="start" fill="outline">1W</ion-button>
-      <ion-button (click)="interval('month')" class="m-auto" size="small" slot="start" fill="outline">1M</ion-button>
-      <ion-button (click)="interval('month3')" class="m-auto" size="small" slot="start" fill="outline">3M</ion-button>
-      <ion-button (click)="interval('year')" class="m-auto" size="small" slot="start" fill="outline">1Y</ion-button>
-      <ion-button (click)="interval('year5')" class="m-auto" size="small" slot="start" fill="outline">5Y</ion-button>
-      <ion-button (click)="interval('year20')" class="m-auto" size="small" slot="start" fill="outline">20Y</ion-button>
+    <ion-button (click)="interval('day')" class="m-auto" size="small" slot="start" fill="{{button1}}">1D</ion-button>
+    <ion-button (click)="interval('week')" class="m-auto" size="small" slot="start" fill="{{button2}}">1W</ion-button>
+    <ion-button (click)="interval('month')" class="m-auto" size="small" slot="start" fill="{{button3}}">1M</ion-button>
+    <ion-button (click)="interval('month3')" class="m-auto" size="small" slot="start" fill="{{button4}}">3M</ion-button>
+    <ion-button (click)="interval('year')" class="m-auto" size="small" slot="start" fill="{{button5}}">1Y</ion-button>
+    <ion-button (click)="interval('year5')" class="m-auto" size="small" slot="start" fill="{{button6}}">5Y</ion-button>
+    <ion-button (click)="interval('year20')" class="m-auto" size="small" slot="start" fill="{{button7}}">20Y</ion-button>
   </div>
 
   <div class="{{divDateStyle}}">
