@@ -17,6 +17,36 @@ export class StockDataService {
               private userService: UserService) {
   }
 
+  // webSocket() {
+  //   let ws = new WebSocket('wss://streamer.finance.yahoo.com');
+  //
+  //   protobuf.load('/assets/YPricingData.proto', (error, root) => {
+  //     if(error || root == undefined){
+  //       return console.log(error)
+  //     }
+  //
+  //     const Yaticker = root.lookupType("yaticker");
+  //
+  //     ws.onopen = function open() {
+  //       console.log('connected');
+  //
+  //       ws.send(JSON.stringify({
+  //         subscribe: ['BTC-USD']
+  //       }));
+  //     };
+  //
+  //     ws.onclose = function close() {
+  //       console.log('disconnected');
+  //     };
+  //
+  //     ws.onmessage = function incoming(message) {
+  //       console.log('comming message')
+  //
+  //       console.log(Yaticker.decode(new Buffer(message.data, 'base64')))
+  //     };
+  //   });
+  // }
+
   webSocket() {
     let ws = new WebSocket('wss://streamer.finance.yahoo.com');
 

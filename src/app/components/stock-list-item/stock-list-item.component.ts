@@ -5,7 +5,6 @@ import {ModalController} from "@ionic/angular";
 import {StockDetailCardComponent} from "../stock-detail-card/stock-detail-card.component";
 import {StockDataService} from "../../services/stock-data.service";
 import {PricePoint} from "../../shared/PricePoint";
-import {Interval} from "../../shared/Interval";
 import {FavouriteService} from "../../services/favourite.service";
 
 @Component({
@@ -32,27 +31,23 @@ export class StockListItemComponent implements OnInit {
   }
 
   calcPercentage(){
+    let data = this.stock.pricePointDtoList.map((entry: PricePoint) => entry.close);
 
-      this.stockDataService.getStockPriceHistory(this.stock.symbol, Interval.day).subscribe(response => {
-        let data = response.map((entry: PricePoint) => entry.close);
-        // console.log("All Data: ", data)
-        // console.log("Last Price: ", data[0])
-        // console.log("current Price: ", data[data.length - 1])
+    console.log(this.stock.symbol)
+    console.log("Last Price: ", this.stock.previousClosePrice)
+    console.log("current Price: ", data[data.length - 1])
 
-        this.stock.previousClosePrice = data[data.length - 1].toFixed(2);
-        let difference: number = (data[data.length - 1] - data[0]);
-        let percent: number =  (difference / data[0] ) * 100;
-        this.stockPercentageGain = percent.toFixed(3);
+    let difference: number = (data[data.length - 1] - this.stock.previousClosePrice);
+    let percent: number =  (difference / this.stock.previousClosePrice) * 100;
+    this.stockPercentageGain = percent.toFixed(2);
 
-        if (percent < 0){
-          this.percentageStyle =  'font-bold text-right '
-          this.percentageStyle += 'text-red-700'
-        }else {
-          this.percentageStyle =  'font-bold text-right '
-          this.percentageStyle += 'text-green-500'
-        }
-      });
+    if (percent < 0){
+      this.percentageStyle = 'font-bold text-right text-red-700'
+    }else {
+      this.percentageStyle = 'font-bold text-right text-green-500'
+    }
   }
+
   toggleLike() {
     this.favouriteService.toggleLiked(this.stock);
     this.stock.liked = !this.stock.liked;
