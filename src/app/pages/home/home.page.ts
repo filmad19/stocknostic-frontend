@@ -17,7 +17,6 @@ export class HomePage implements OnInit {
               private userService: UserService) { }
 
   ngOnInit() {
-    // this.stockDataService.webSocket();
 
     const access_token = localStorage.getItem('access_token');
 
@@ -34,13 +33,15 @@ export class HomePage implements OnInit {
 
   searchStock($event: any) {
     this.stockDataService.searchStocks($event.target.value).subscribe(response => {
-        this.stockList = response;
+      this.stockList = response;
+      this.stockDataService.webSocket(this.stockList);
     })
   }
 
   loadList() {
     this.stockDataService.searchStocks("").subscribe(response => {
       this.stockList = response;
+      this.stockDataService.webSocket(this.stockList);
     })
   }
 }

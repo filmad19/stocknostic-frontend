@@ -6,5 +6,6 @@ export interface Stock {
   liked: boolean
   currency: string
   previousClosePrice: number
+  currentPrice: number
   pricePointDtoList: PricePoint[]
 }

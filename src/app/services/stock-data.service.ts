@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import {ChangeDetectorRef, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import * as protobuf from "protobufjs";
 import {Stock} from "../shared/Stock";
 import {PricePoint} from "../shared/PricePoint";
 import {UserService} from "./user.service";
+import {StockWebsocket} from "../shared/StockWebsocket";
+import { UpdateStockListService} from "./update-stock-list.service";
 
 const {Buffer} = require("buffer/")
 
@@ -14,7 +16,8 @@ const {Buffer} = require("buffer/")
 export class StockDataService {
 
   constructor(private http: HttpClient,
-              private userService: UserService) {
+              private userService: UserService,
+              private updateStockListService: UpdateStockListService) {
   }
 
   // webSocket() {
@@ -47,8 +50,12 @@ export class StockDataService {
   //   });
   // }
 
-  webSocket() {
+  webSocket(stocklist: Stock[]) {
+    let symbolList = stocklist.map(stock => stock.symbol);
+
     let ws = new WebSocket('wss://streamer.finance.yahoo.com');
+
+    const updateStockListService = this.updateStockListService;
 
     protobuf.load('/assets/YPricingData.proto', (error, root) => {
       if(error || root == undefined){
@@ -61,7 +68,7 @@ export class StockDataService {
         console.log('connected');
 
         ws.send(JSON.stringify({
-          subscribe: ['BTC-USD']
+          subscribe: symbolList
         }));
       };
 
@@ -70,9 +77,18 @@ export class StockDataService {
       };
 
       ws.onmessage = function incoming(message) {
-        console.log('comming message')
+        let webStock: StockWebsocket | any = Yaticker.decode(new Buffer(message.data, 'base64')).toJSON();
 
-        console.log(Yaticker.decode(new Buffer(message.data, 'base64')))
+        let selectedStock: Stock | undefined = stocklist.find(stock => stock.symbol == webStock.id)
+
+
+        if(selectedStock != null) {
+          selectedStock.currentPrice = webStock.price
+          updateStockListService.eventEmitter.emit(selectedStock);
+
+
+          console.log("111" + selectedStock.symbol + " = " + selectedStock.currentPrice)
+        }
       };
     });
   }
