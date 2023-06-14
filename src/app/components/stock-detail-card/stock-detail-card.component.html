@@ -1,5 +1,5 @@
 
-<ion-card class="drop-shadow-2xl">
+<ion-card class="w-auto h-auto">
   <ion-toolbar>
     <div  class="flex-row items-center">
       <ion-button (click)="dismissModal()" fill="clear" >
@@ -52,28 +52,29 @@
     <div class="flex flex-row items-center pt-1">
       <div class="flex flex-row items-center border-2 border-blue-600 rounded-lg p-3 w-full">
         <span>Recommendation: </span>
-        <span class="font-bold text-red-700 ml-auto">{{recommendation}}</span>
+        <span class="{{recommendationStyle}}">{{recommendation}}</span>
       </div>
     </div>
 
-    <div class="flex flex-row items-center pt-2">
+
+    <div class="flex flex-row mt-2">
+      <ion-label class="ml-8 text-xs">oversold</ion-label>
+      <ion-label class="ml-3 text-xs">overbought</ion-label>
+    </div>
+
+
+    <div class="flex flex-row items-center">
       <ion-checkbox checked="true" justify="space-between" class="p-1"></ion-checkbox>
+      <span class="ml-1 ml-1 font-bold text-lg">RSI</span>
+      <!-- w-9 items-center border-2 border-blue-600 rounded-lg ml-2-->
 
-      <span class="pl-2 font-bold text-lg">RSI</span>
+      <ion-item class="border-2 border-blue-600 rounded-lg ml-2 w-20">
+        <ion-input type="number" placeholder="30" ></ion-input>
+      </ion-item>
 
-      <div class="items-center border-2 border-blue-600 rounded-lg p-1  ml-auto">
-          <ion-button size="small" fill="clear" class="p-1">
-            <ion-icon size="small" name="remove-outline"></ion-icon>
-          </ion-button>
-
-          <span class="font-bold text-center p-1">1</span>
-
-          <span class="p-1 ml-auto">
-            <ion-button size="small" fill="clear">
-              <ion-icon size="small" name="add-outline"></ion-icon>
-            </ion-button>
-          </span>
-      </div>
+      <ion-item class="border-2 border-blue-600 rounded-lg ml-1 w-20">
+        <ion-input  type="number" placeholder="70"></ion-input>
+      </ion-item>
 
     </div>
 

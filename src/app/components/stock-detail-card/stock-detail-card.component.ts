@@ -17,6 +17,7 @@ import {FavouriteService} from "../../services/favourite.service";
 export class StockDetailCardComponent implements OnInit {
   currentInterval = Interval.day;
   percentageStyle: string = '';
+  recommendationStyle: string = ''
   date: string = '';
   showDate = false;
   divDateStyle = 'flex flex-row justify-center invisible'
@@ -48,10 +49,13 @@ export class StockDetailCardComponent implements OnInit {
       this.recommendation = response.rsi.toFixed(2);
       if (this.recommendation < 30){
         this.recommendation += "  (buy)"
+        this.recommendationStyle = 'font-bold text-green-500 ml-auto'
       }else if (this.recommendation > 70){
         this.recommendation += "  (sell)"
+        this.recommendationStyle = 'font-bold text-red-700 ml-auto'
       }else {
         this.recommendation += "  (hold)"
+        this.recommendationStyle = 'font-bold text-grey-500 ml-auto'
       }
     });
   }
