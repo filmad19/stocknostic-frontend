@@ -52,7 +52,6 @@ export class StockDataService {
     let params = new HttpParams().set("q", searchString);
     let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());
 
-
     return this.http.get<Stock[]> (
       environment.apiPath + "/stock/search", {params, headers}
     )
@@ -65,14 +64,6 @@ export class StockDataService {
     return this.http.get<PricePoint[]>(
       environment.apiPath + "/stock/history/" + symbol, {params, headers}
     );
-  }
-
-  getFavouriteStocks(){
-    let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());
-
-    return this.http.get<Stock[]> (
-      environment.apiPath + "/favourite",{headers}
-    )
   }
 
 

@@ -14,7 +14,7 @@ export class HomePage implements OnInit {
   stockList: Stock[] = [];
 
   constructor(private stockDataService: StockDataService,
-              private userService: UserService,) { }
+              private userService: UserService) { }
 
   ngOnInit() {
     // this.stockDataService.webSocket();
@@ -24,11 +24,11 @@ export class HomePage implements OnInit {
     if (access_token == null || access_token == "null") {
       this.userService.fetchAccessToken().subscribe(token => {
         localStorage.setItem('access_token', token.value);
-        this.displayFavourites();
+        this.loadList();
         return;
       })
     } else {
-      this.displayFavourites();
+      this.loadList();
     }
   }
 
@@ -38,9 +38,9 @@ export class HomePage implements OnInit {
     })
   }
 
-  displayFavourites(){
-    this.stockDataService.getFavouriteStocks().subscribe(response => {
+  loadList() {
+    this.stockDataService.searchStocks("").subscribe(response => {
       this.stockList = response;
-    });
+    })
   }
 }

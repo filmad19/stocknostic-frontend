@@ -14,21 +14,17 @@ export class FavouriteService {
 
   toggleLiked(stock: Stock){
     if(stock.liked){
-      this.removeStockFromFavourite(stock.symbol).subscribe(response => {
-        console.log(response)
-      })
+      this.removeStockFromFavourite(stock.symbol).subscribe()
     } else if(!stock.liked){
-      this.addStockToFavourite(stock.symbol).subscribe(response => {
-        console.log(response)
-      })
+      this.addStockToFavourite(stock).subscribe()
     }
   }
 
-  private addStockToFavourite(stockSymbol: string){
+  private addStockToFavourite(stock: Stock){
     let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());
 
     return this.http.post<Stock[]> (
-      environment.apiPath + "/favourite", {stockSymbol}, {headers}
+      environment.apiPath + "/favourite", {symbol: stock.symbol, companyName: stock.companyName}, {headers}
     )
   }
 
