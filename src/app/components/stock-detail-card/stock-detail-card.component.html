@@ -1,5 +1,6 @@
 
-<ion-card class="w-auto h-auto">
+<!--<ion-card class="w-auto h-auto">-->
+
   <ion-toolbar>
     <div  class="flex-row items-center">
       <ion-button (click)="dismissModal()" fill="clear" >
@@ -13,6 +14,7 @@
     </div>
   </ion-toolbar>
 
+<div class="pl-0.5 pr-0.5">
   <div class="flex-row items-center">
     <div class="flex-column ion-float-left pl-2 pt-1 pb-1" >
       <ion-card-title class="text-lg">{{stock.symbol}}</ion-card-title>
@@ -56,27 +58,29 @@
       </div>
     </div>
 
+    <div class="{{rsiStyle}}">
+        <div class="flex flex-row mt-2">
+          <ion-label class="ml-8 text-xs">oversold</ion-label>
+          <ion-label class="ml-3 text-xs">overbought</ion-label>
+        </div>
 
-    <div class="flex flex-row mt-2">
-      <ion-label class="ml-8 text-xs">oversold</ion-label>
-      <ion-label class="ml-3 text-xs">overbought</ion-label>
+
+        <div *ngIf="stock.liked" class="flex flex-row items-center">
+<!--          <ion-checkbox checked="true" justify="space-between" class="p-1"></ion-checkbox>-->
+          <span class="ml-1 mr-3 font-bold text-lg">RSI</span>
+          <!-- w-9 items-center border-2 border-blue-600 rounded-lg ml-2-->
+
+          <ion-item class="border-2 border-blue-600 rounded-lg ml-2 w-20">
+            <ion-input type="number" placeholder="30" (change)="sendRsiData()" [(ngModel)]="oversellLimit"></ion-input>
+          </ion-item>
+
+          <ion-item class="border-2 border-blue-600 rounded-lg ml-1 w-20">
+            <ion-input  type="number" placeholder="70" (change)="sendRsiData()" [(ngModel)]="overboughtLimit" ></ion-input>
+          </ion-item>
+
+        </div>
     </div>
-
-
-    <div class="flex flex-row items-center">
-      <ion-checkbox checked="true" justify="space-between" class="p-1"></ion-checkbox>
-      <span class="ml-1 ml-1 font-bold text-lg">RSI</span>
-      <!-- w-9 items-center border-2 border-blue-600 rounded-lg ml-2-->
-
-      <ion-item class="border-2 border-blue-600 rounded-lg ml-2 w-20">
-        <ion-input type="number" placeholder="30" ></ion-input>
-      </ion-item>
-
-      <ion-item class="border-2 border-blue-600 rounded-lg ml-1 w-20">
-        <ion-input  type="number" placeholder="70"></ion-input>
-      </ion-item>
-
-    </div>
-
   </ion-card-content>
-</ion-card>
+</div>
+<!--</ion-card>-->
+
