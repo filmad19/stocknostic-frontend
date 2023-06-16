@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Injectable} from '@angular/core';
+import { Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import * as protobuf from "protobufjs";
@@ -19,6 +19,10 @@ export class StockDataService {
               private userService: UserService,
               private updateStockListService: UpdateStockListService) {
   }
+
+  webSocket: WebSocket | null = null;
+
+
 
   // webSocket() {
   //   let ws = new WebSocket('wss://streamer.finance.yahoo.com');
@@ -50,11 +54,17 @@ export class StockDataService {
   //   });
   // }
 
-  webSocket(stocklist: Stock[]) {
+  openWebSocket(stocklist: Stock[]) {
+    if (this.webSocket) {
+      this.webSocket.close();
+      this.webSocket = null;
+    }
+
     let symbolList = stocklist.map(stock => stock.symbol);
 
-    let ws = new WebSocket('wss://streamer.finance.yahoo.com');
+    this.webSocket = new WebSocket('wss://streamer.finance.yahoo.com');
 
+    const ws = this.webSocket
     const updateStockListService = this.updateStockListService;
 
     protobuf.load('/assets/YPricingData.proto', (error, root) => {
@@ -85,9 +95,6 @@ export class StockDataService {
         if(selectedStock != null) {
           selectedStock.currentPrice = webStock.price
           updateStockListService.eventEmitter.emit(selectedStock);
-
-
-          console.log("111" + selectedStock.symbol + " = " + selectedStock.currentPrice)
         }
       };
     });
@@ -111,17 +118,6 @@ export class StockDataService {
       environment.apiPath + "/stock/history/" + symbol, {params, headers}
     );
   }
-
-
-
-  // getRecommendation(symbol: string){
-  //   let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());
-  //   let params = new HttpParams().set("symbol", symbol);
-  //
-  //   return this.http.get<String> (
-  //     environment.apiPath + "/indicator/recommendation",{params, headers}
-  //   )
-  // }
 
   getRsi(symbol: string){
     let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());

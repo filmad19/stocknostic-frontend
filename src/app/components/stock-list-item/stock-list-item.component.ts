@@ -30,30 +30,34 @@ export class StockListItemComponent implements OnInit {
 
 
   ngOnInit() {
-    this.calcPercentage()
+    this.setInitialPrices()
 
     this.updateStockListService.eventEmitter.subscribe(selectedStock => {
-
       if(selectedStock === this.stock){
-        this.stock = selectedStock;
+        this.stock.currentPrice = selectedStock.currentPrice.toFixed(2);
         this.cdr.detectChanges()
-
-        console.log("888" + this.stock.symbol + " = " + this.stock.currentPrice)
+        this.calcPercentage()
       }
     });
   }
 
-  calcPercentage(){
+  setInitialPrices(){
     let data = this.stock.pricePointDtoList.map((entry: PricePoint) => entry.close);
-    this.stock.currentPrice = data[data.length - 1]
+    this.stock.currentPrice = data[data.length - 1].toFixed(2);
+    this.calcPercentage()
+  }
 
-    console.log(this.stock.symbol)
-    console.log("Last Price: ", this.stock.previousClosePrice)
-    console.log("current Price: ", this.stock.currentPrice)
-
+  calcPercentage(){
     let difference: number = (this.stock.currentPrice - this.stock.previousClosePrice);
     let percent: number =  (difference / this.stock.previousClosePrice) * 100;
     this.stockPercentageGain = percent.toFixed(2);
+
+    // if(this.stock.symbol == "AAPL"){
+    //   console.log(this.stock.symbol)
+    //   console.log("Last Price: ", this.stock.previousClosePrice)
+    //   console.log("current Price: ", this.stock.currentPrice)
+    //   console.log("percentage gain: ", this.stockPercentageGain)
+    // }
 
     if (percent < 0){
       this.percentageStyle = 'font-bold text-right text-red-700'

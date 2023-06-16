@@ -17,31 +17,23 @@ export class HomePage implements OnInit {
               private userService: UserService) { }
 
   ngOnInit() {
-
-    const access_token = localStorage.getItem('access_token');
-
-    if (access_token == null || access_token == "null") {
-      this.userService.fetchAccessToken().subscribe(token => {
-        localStorage.setItem('access_token', token.value);
-        this.loadList();
-        return;
-      })
-    } else {
+    this.userService.login().subscribe(token => {
+      localStorage.setItem('access_token', token.value)
       this.loadList();
-    }
+    });
   }
 
   searchStock($event: any) {
     this.stockDataService.searchStocks($event.target.value).subscribe(response => {
       this.stockList = response;
-      this.stockDataService.webSocket(this.stockList);
+      this.stockDataService.openWebSocket(this.stockList);
     })
   }
 
   loadList() {
     this.stockDataService.searchStocks("").subscribe(response => {
       this.stockList = response;
-      this.stockDataService.webSocket(this.stockList);
+      this.stockDataService.openWebSocket(this.stockList);
     })
   }
 }

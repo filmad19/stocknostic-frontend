@@ -8,6 +8,8 @@ import {PricePoint} from "../../shared/PricePoint";
 import {ModalController} from "@ionic/angular";
 import {FavouriteService} from "../../services/favourite.service";
 import {UserService} from "../../services/user.service";
+import {UpdateStockListService} from "../../services/update-stock-list.service";
+import {IndicatorService} from "../../services/indicator.service";
 
 @Component({
   selector: 'app-stock-detail-card',
@@ -17,6 +19,8 @@ import {UserService} from "../../services/user.service";
 
 export class StockDetailCardComponent implements OnInit {
   currentInterval = Interval.day;
+  closePrices: number[] = []
+
   percentageStyle: string = '';
   recommendationStyle: string = ''
   date: string = '';
@@ -41,8 +45,9 @@ export class StockDetailCardComponent implements OnInit {
               private modalCtrl: ModalController,
               private modalController: ModalController,
               private favouriteService: FavouriteService,
-              private userService: UserService) {
-  }
+              private updateStockListService: UpdateStockListService,
+              private userService: UserService,
+              private indicatorService: IndicatorService) {}
 
   stock: Stock | any;
   recommendation: string | any;
@@ -67,6 +72,11 @@ export class StockDetailCardComponent implements OnInit {
       }
     });
 
+    this.updateStockListService.eventEmitter.subscribe(selectedStock => {
+      if(selectedStock === this.stock){
+        this.calcPercentage()
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -77,12 +87,12 @@ export class StockDetailCardComponent implements OnInit {
 
       if (this.currentInterval != Interval.day) {
         this.formatLabels(false);
-      } else {
+      }else {
         this.formatLabels(true);
       }
 
-      let data = response.map((entry: PricePoint) => entry.close);
-      this.calcPercentage(data)
+      this.closePrices = response.map((entry: PricePoint) => entry.close);
+      this.calcPercentage()
       const gradient = ctx.createLinearGradient(0, 0, 0, 450);
       gradient.addColorStop(0, 'rgb(0,255,0)');
       gradient.addColorStop(1, 'rgba(0, 255, 0, 0)');
@@ -90,7 +100,7 @@ export class StockDetailCardComponent implements OnInit {
       this.chartData = [
         {
           label: '$',
-          data: data,
+          data: this.closePrices,
 
           pointHitRadius: 15, // expands the hover 'detection' area
           pointHoverRadius: 8, // grows the point when hovered
@@ -277,18 +287,22 @@ export class StockDetailCardComponent implements OnInit {
   }
 
 
-  calcPercentage(data: any) {
-    console.log("Unformatted Label: ", this.unformattedLabel)
-    console.log("All Data:  ", data)
-    console.log("Last Price: ", data[0])
-    console.log("current Price: ", data[data.length - 1])
+  calcPercentage(){
+    let previousePrice = this.stock.previousClosePrice
 
-    let difference: number = (data[data.length - 1] - data[0]);
-    let percent: number = (difference / data[0]) * 100;
-    this.stockPercentageGain = percent.toFixed(3);
+    if(this.currentInterval != Interval.day){
+      previousePrice = this.closePrices[0]
+    }
 
+    let difference: number = (this.stock.currentPrice - previousePrice);
+    let percent: number =  (difference / previousePrice) * 100;
+    this.stockPercentageGain = percent.toFixed(2);
 
-    this.stock.previousClosePrice = data[data.length - 1].toFixed(2);
+    // console.log(this.stock.symbol)
+    // console.log("Last Price: ", this.stock.previousClosePrice)
+    // console.log("closePrices[0]: ", this.closePrices[0])
+    // console.log("current Price: ", this.stock.currentPrice)
+    // console.log("percentage gain: ", this.stockPercentageGain)
 
     if (percent < 0) {
       this.percentageStyle = 'text-red-700'
@@ -307,14 +321,14 @@ export class StockDetailCardComponent implements OnInit {
   }
 
   getRsiSettings(){
-    this.userService.getRsiValuesToFrontend(this.stock.symbol).subscribe( response => {
+    this.indicatorService.getRsiValuesToFrontend(this.stock.symbol).subscribe( response => {
         this.overboughtLimit = response.overbought;
         this.oversellLimit = response.oversold;
       });
   }
 
   sendRsiData() {
-    console.log(this.oversellLimit + ' - ' + this.overboughtLimit);
-    this.userService.sendRsiValuesToBackend(this.oversellLimit, this.overboughtLimit, this.stock.symbol);
+    // console.log(this.oversellLimit + ' - ' + this.overboughtLimit);
+    this.indicatorService.sendRsiValuesToBackend(this.oversellLimit, this.overboughtLimit, this.stock.symbol);
   }
 }
