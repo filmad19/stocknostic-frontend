@@ -4,6 +4,12 @@ import {environment} from "../../environments/environment";
 import {RsiSettings} from "../shared/RsiSettings";
 import {UserService} from "./user.service";
 
+/*
+* Matthias Filzmaier
+* 06.05.2023
+* stocknostic
+*/
+
 @Injectable({
   providedIn: 'root'
 })

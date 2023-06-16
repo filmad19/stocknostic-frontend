@@ -3,6 +3,12 @@ import {environment} from "../../environments/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Token} from "../shared/Token";
 
+/*
+* Matthias Filzmaier
+* 02.05.2023
+* stocknostic
+*/
+
 @Injectable({
   providedIn: 'root'
 })

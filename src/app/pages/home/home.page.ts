@@ -3,7 +3,11 @@ import {StockDataService} from "../../services/stock-data.service";
 import {Stock} from "../../shared/Stock";
 import {UserService} from "../../services/user.service";
 
-
+/*
+* Matthias Filzmaier
+* 21.04.2023
+* stocknostic
+*/
 
 @Component({
   selector: 'app-home',

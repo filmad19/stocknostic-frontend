@@ -4,6 +4,12 @@ import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {UserService} from "./user.service";
 
+/*
+* Matthias Filzmaier
+* 21.04.2023
+* stocknostic
+*/
+
 @Injectable({
   providedIn: 'root'
 })

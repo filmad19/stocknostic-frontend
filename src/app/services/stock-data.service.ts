@@ -10,6 +10,12 @@ import { UpdateStockListService} from "./update-stock-list.service";
 
 const {Buffer} = require("buffer/")
 
+/*
+* Matthias Filzmaier
+* 21.04.2023
+* stocknostic
+*/
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,38 +27,6 @@ export class StockDataService {
   }
 
   webSocket: WebSocket | null = null;
-
-
-
-  // webSocket() {
-  //   let ws = new WebSocket('wss://streamer.finance.yahoo.com');
-  //
-  //   protobuf.load('/assets/YPricingData.proto', (error, root) => {
-  //     if(error || root == undefined){
-  //       return console.log(error)
-  //     }
-  //
-  //     const Yaticker = root.lookupType("yaticker");
-  //
-  //     ws.onopen = function open() {
-  //       console.log('connected');
-  //
-  //       ws.send(JSON.stringify({
-  //         subscribe: ['BTC-USD']
-  //       }));
-  //     };
-  //
-  //     ws.onclose = function close() {
-  //       console.log('disconnected');
-  //     };
-  //
-  //     ws.onmessage = function incoming(message) {
-  //       console.log('comming message')
-  //
-  //       console.log(Yaticker.decode(new Buffer(message.data, 'base64')))
-  //     };
-  //   });
-  // }
 
   openWebSocket(stocklist: Stock[]) {
     if (this.webSocket) {
