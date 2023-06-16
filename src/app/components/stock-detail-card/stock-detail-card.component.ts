@@ -7,6 +7,7 @@ import {Stock} from "../../shared/Stock";
 import {PricePoint} from "../../shared/PricePoint";
 import {ModalController} from "@ionic/angular";
 import {FavouriteService} from "../../services/favourite.service";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-stock-detail-card',
@@ -17,10 +18,14 @@ import {FavouriteService} from "../../services/favourite.service";
 export class StockDetailCardComponent implements OnInit {
   currentInterval = Interval.day;
   percentageStyle: string = '';
+  recommendationStyle: string = ''
   date: string = '';
   showDate = false;
-  divDateStyle = 'flex flex-row justify-center invisible'
+  divDateStyle = 'flex text-xs flex-row justify-center visible'
+  rsiStyle = 'invisible'
   unformattedLabel = [];
+  oversellLimit = 30;
+  overboughtLimit = 70;
 
   button1 = 'solid'
   button2 = 'outline'
@@ -35,7 +40,9 @@ export class StockDetailCardComponent implements OnInit {
               private router: Router,
               private modalCtrl: ModalController,
               private modalController: ModalController,
-              private favouriteService: FavouriteService) {}
+              private favouriteService: FavouriteService,
+              private userService: UserService) {
+  }
 
   stock: Stock | any;
   recommendation: string | any;
@@ -44,17 +51,22 @@ export class StockDetailCardComponent implements OnInit {
 
   @ViewChild('canva') canvasRef: ElementRef | any;
 
-  ngOnInit(){
+  ngOnInit() {
+    this.displayRsi();
     this.stockDataService.getRsi(this.stock.symbol).subscribe(response => {
       this.recommendation = response.rsi.toFixed(2);
-      if (this.recommendation < 30){
+      if (this.recommendation < 30) {
         this.recommendation += "  (buy)"
-      }else if (this.recommendation > 70){
+        this.recommendationStyle = 'font-bold text-green-500 ml-auto'
+      } else if (this.recommendation > 70) {
         this.recommendation += "  (sell)"
-      }else {
+        this.recommendationStyle = 'font-bold text-red-700 ml-auto'
+      } else {
         this.recommendation += "  (hold)"
+        this.recommendationStyle = 'font-bold text-grey-500 ml-auto'
       }
     });
+
   }
 
   ngAfterViewInit() {
@@ -65,7 +77,7 @@ export class StockDetailCardComponent implements OnInit {
 
       if (this.currentInterval != Interval.day) {
         this.formatLabels(false);
-      }else {
+      } else {
         this.formatLabels(true);
       }
 
@@ -144,11 +156,13 @@ export class StockDetailCardComponent implements OnInit {
   toggleLike() {
     this.favouriteService.toggleLiked(this.stock);
     this.stock.liked = !this.stock.liked;
+    this.displayRsi();
   }
 
-  interval(interval: string){
-    switch (interval){
-      case 'week': this.currentInterval = Interval.week;
+  interval(interval: string) {
+    switch (interval) {
+      case 'week':
+        this.currentInterval = Interval.week;
         this.showDate = false;
         this.button1 = 'outline'
         this.button2 = 'solid'
@@ -159,7 +173,8 @@ export class StockDetailCardComponent implements OnInit {
         this.button7 = 'outline'
         break;
 
-      case 'month': this.currentInterval = Interval.month;
+      case 'month':
+        this.currentInterval = Interval.month;
         this.showDate = false;
         this.button1 = 'outline'
         this.button2 = 'outline'
@@ -170,7 +185,8 @@ export class StockDetailCardComponent implements OnInit {
         this.button7 = 'outline'
         break;
 
-      case 'month3': this.currentInterval = Interval.month3;
+      case 'month3':
+        this.currentInterval = Interval.month3;
         this.showDate = false;
         this.button1 = 'outline'
         this.button2 = 'outline'
@@ -181,7 +197,8 @@ export class StockDetailCardComponent implements OnInit {
         this.button7 = 'outline'
         break;
 
-      case 'year': this.currentInterval = Interval.year;
+      case 'year':
+        this.currentInterval = Interval.year;
         this.showDate = false;
         this.button1 = 'outline'
         this.button2 = 'outline'
@@ -192,7 +209,8 @@ export class StockDetailCardComponent implements OnInit {
         this.button7 = 'outline'
         break;
 
-      case 'year5': this.currentInterval = Interval.year5;
+      case 'year5':
+        this.currentInterval = Interval.year5;
         this.showDate = false;
         this.button1 = 'outline'
         this.button2 = 'outline'
@@ -203,7 +221,8 @@ export class StockDetailCardComponent implements OnInit {
         this.button7 = 'outline'
         break;
 
-      case 'year20': this.currentInterval = Interval.year20;
+      case 'year20':
+        this.currentInterval = Interval.year20;
         this.showDate = false;
         this.button1 = 'outline'
         this.button2 = 'outline'
@@ -214,7 +233,8 @@ export class StockDetailCardComponent implements OnInit {
         this.button7 = 'solid'
         break;
 
-      default: this.currentInterval = Interval.day;
+      default:
+        this.currentInterval = Interval.day;
         this.showDate = true;
         this.button1 = 'solid'
         this.button2 = 'outline'
@@ -226,23 +246,23 @@ export class StockDetailCardComponent implements OnInit {
         break;
     }
 
-    if (this.showDate){
-      this.divDateStyle = 'flex flex-row justify-center visible'
-    }else {
-      this.divDateStyle = 'flex flex-row justify-center invisible'
+    if (this.showDate) {
+      this.divDateStyle = 'flex text-xs flex-row justify-center visible'
+    } else {
+      this.divDateStyle = 'flex text-xs flex-row justify-center invisible'
     }
     this.ngAfterViewInit()
 
   }
 
-  formatLabels(day: boolean){
+  formatLabels(day: boolean) {
     const formattedLabels: string[] = [];
     let index: number;
     this.unformattedLabel = this.chartLabels;
 
-    if (!day){
+    if (!day) {
       index = 0;
-    }else {
+    } else {
       index = 1;
     }
 
@@ -257,23 +277,44 @@ export class StockDetailCardComponent implements OnInit {
   }
 
 
-  calcPercentage(data:any){
+  calcPercentage(data: any) {
     console.log("Unformatted Label: ", this.unformattedLabel)
     console.log("All Data:  ", data)
     console.log("Last Price: ", data[0])
     console.log("current Price: ", data[data.length - 1])
 
     let difference: number = (data[data.length - 1] - data[0]);
-    let percent: number =  (difference / data[0] ) * 100;
+    let percent: number = (difference / data[0]) * 100;
     this.stockPercentageGain = percent.toFixed(3);
 
 
     this.stock.previousClosePrice = data[data.length - 1].toFixed(2);
 
-    if (percent < 0){
+    if (percent < 0) {
       this.percentageStyle = 'text-red-700'
-    }else {
+    } else {
       this.percentageStyle = 'text-green-500'
     }
+  }
+
+  displayRsi() {
+    if (this.stock.liked) {
+      this.rsiStyle = 'visible'
+    } else {
+      this.rsiStyle = 'invisible'
+    }
+    this.getRsiSettings();
+  }
+
+  getRsiSettings(){
+    this.userService.getRsiValuesToFrontend(this.stock.symbol).subscribe( response => {
+        this.overboughtLimit = response.overbought;
+        this.oversellLimit = response.oversold;
+      });
+  }
+
+  sendRsiData() {
+    console.log(this.oversellLimit + ' - ' + this.overboughtLimit);
+    this.userService.sendRsiValuesToBackend(this.oversellLimit, this.overboughtLimit, this.stock.symbol);
   }
 }

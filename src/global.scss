@@ -42,3 +42,22 @@ html, body {
   background-attachment: fixed; // The background is fixed relative to the viewport
   color: $steel-regular; // Change text color to an _almost_ white
 }
+
+ion-item,
+ion-input{
+  --ion-background-color: transparent;
+}
+
+ion-modal {
+
+  --width: fit-content;
+  --height: fit-content;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 15px -3px rgb( 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+ion-modal::part(backdrop) {
+  opacity: 1;
+}
+
+
