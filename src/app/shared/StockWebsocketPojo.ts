@@ -1,4 +1,4 @@
-export interface StockWebsocket {
+export interface StockWebsocketPojo {
   id: string
   price: number
   exchange: string

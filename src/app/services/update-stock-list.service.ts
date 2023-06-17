@@ -12,6 +12,7 @@ import {Stock} from "../shared/Stock";
 })
 export class UpdateStockListService {
 
+  //event emmitter to update the prices received by the websocket
   @Output() eventEmitter: EventEmitter<Stock> = new EventEmitter();
 
   constructor() { }

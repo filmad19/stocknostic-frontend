@@ -27,6 +27,7 @@ export class UserService {
   getUserAccessToken(): string{
     let token = localStorage.getItem('access_token');
 
+    //if there is no token return null as a string
     if(!token){
       token = "null";
     }

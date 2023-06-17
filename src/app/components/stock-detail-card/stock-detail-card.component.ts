@@ -57,11 +57,12 @@ export class StockDetailCardComponent implements OnInit {
   @ViewChild('canva') canvasRef: ElementRef | any;
 
   ngOnInit() {
+    // get rsi configuration
     this.stockDataService.getRsi(this.stock.symbol).subscribe(response => {
       this.recommendation = response.rsi.toFixed(2);
-      this.getRsiData();
+      this.getRsiConfig();
     });
-
+    // recalculate the percentage gain/loss
     this.updateStockListService.eventEmitter.subscribe(selectedStock => {
       if(selectedStock === this.stock){
         this.calcPercentage()
@@ -154,11 +155,13 @@ export class StockDetailCardComponent implements OnInit {
   }
 
   toggleLike() {
+    // add or remove stock of the favourite list
     if(this.stock.liked){
       this.favouriteService.removeStockFromFavourite(this.stock.symbol).subscribe()
     } else if(!this.stock.liked){
       this.favouriteService.addStockToFavourite(this.stock).subscribe(response => {
-        this.getRsiData();
+        //load the rsi config, because the config is only available when the stock is liked
+        this.getRsiConfig();
       })
     }
 
@@ -285,6 +288,7 @@ export class StockDetailCardComponent implements OnInit {
     let previousePrice = this.stock.previousClosePrice
 
     if(this.currentInterval != Interval.day){
+      //the previousClosePrice is yesterdays closing price, so for 1 month the first element of the list has to be taken for percentage gain
       previousePrice = this.closePrices[0]
     }
 
@@ -292,6 +296,7 @@ export class StockDetailCardComponent implements OnInit {
     let percent: number =  (difference / previousePrice) * 100;
     this.stockPercentageGain = percent.toFixed(2);
 
+    //styling the gain/loss
     if (percent < 0) {
       this.percentageStyle = 'text-red-700'
     } else {
@@ -299,14 +304,16 @@ export class StockDetailCardComponent implements OnInit {
     }
   }
 
-  getRsiData() {
+  getRsiConfig() {
+    //only available if the stock is liked
     if (this.stock.liked) {
       this.rsiStyle = 'visible'
     } else {
       this.rsiStyle = 'invisible'
     }
 
-    this.indicatorService.getRsiValuesToFrontend(this.stock.symbol).subscribe( response => {
+    //get the rsi configuration parameters
+    this.indicatorService.getRsiConfiguration(this.stock.symbol).subscribe(response => {
       this.overboughtLimit = response.overbought;
       this.oversoldLimit = response.oversold;
       this.setRecommendation();
@@ -327,7 +334,8 @@ export class StockDetailCardComponent implements OnInit {
   }
 
   sendRsiData() {
-    this.indicatorService.sendRsiValuesToBackend(this.oversoldLimit, this.overboughtLimit, this.stock.symbol).subscribe(response => {
+    //send the config to the backend
+    this.indicatorService.setRsiConfiguration(this.oversoldLimit, this.overboughtLimit, this.stock.symbol).subscribe(response => {
       this.setRecommendation();
     });
   }

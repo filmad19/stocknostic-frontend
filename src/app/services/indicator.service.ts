@@ -18,14 +18,14 @@ export class IndicatorService {
   constructor(private http: HttpClient,
               private userService: UserService) { }
 
-  sendRsiValuesToBackend(oversold:number, overbought:number, symbol:string){
+  setRsiConfiguration(oversold:number, overbought:number, symbol:string){
     let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());
     let params = new HttpParams().set("symbol", symbol);
 
     return this.http.post(environment.apiPath + "/indicator/rsi/settings", {oversold: oversold, overbought: overbought}, {params, headers});
   }
 
-  getRsiValuesToFrontend(symbol:string){
+  getRsiConfiguration(symbol:string){
     let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());
     let params = new HttpParams().set("symbol", symbol);
 

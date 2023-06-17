@@ -15,6 +15,12 @@ import {UpdateStockListService} from "../../services/update-stock-list.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
+/*
+* Matthias Filzmaier
+* 14.05.2023
+* stocknostic
+*/
+
 export class StockListItemComponent implements OnInit {
   stockPercentageGain: string = '';
   percentageStyle: string = 'font-bold text-right'
@@ -32,6 +38,7 @@ export class StockListItemComponent implements OnInit {
   ngOnInit() {
     this.setInitialPrices()
 
+    // detect changes to the price and recalculate the percentage gain/loss
     this.updateStockListService.eventEmitter.subscribe(selectedStock => {
       if(selectedStock === this.stock){
         this.stock.currentPrice = selectedStock.currentPrice.toFixed(2);
@@ -42,6 +49,7 @@ export class StockListItemComponent implements OnInit {
   }
 
   setInitialPrices(){
+    //set the current price to the latest in the list
     let data = this.stock.pricePointDtoList.map((entry: PricePoint) => entry.close);
     this.stock.currentPrice = data[data.length - 1].toFixed(2);
     this.calcPercentage()
@@ -52,6 +60,7 @@ export class StockListItemComponent implements OnInit {
     let percent: number =  (difference / this.stock.previousClosePrice) * 100;
     this.stockPercentageGain = percent.toFixed(2);
 
+    //format percentage
     if (percent < 0){
       this.percentageStyle = 'font-bold text-right text-red-700'
     }else {
@@ -60,6 +69,7 @@ export class StockListItemComponent implements OnInit {
   }
 
   toggleLike() {
+    // add or remove stock of the favourite list
     if(this.stock.liked){
       this.favouriteService.removeStockFromFavourite(this.stock.symbol).subscribe()
     } else if(!this.stock.liked){
