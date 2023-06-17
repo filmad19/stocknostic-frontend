@@ -5,8 +5,8 @@ import {RsiSettings} from "../shared/RsiSettings";
 import {UserService} from "./user.service";
 
 /*
-* Matthias Filzmaier
-* 06.05.2023
+* Stefan Ghergheles
+* 16.06.2023
 * stocknostic
 */
 
@@ -19,19 +19,16 @@ export class IndicatorService {
               private userService: UserService) { }
 
   sendRsiValuesToBackend(oversold:number, overbought:number, symbol:string){
-    const data = {
-      symbol: new HttpParams().set("symbol", symbol),
-      oversold: oversold,
-      overbought: overbought
-    };
     let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());
-    return this.http.post(environment.apiPath + "/indicator/rsi", {data, headers});
+    let params = new HttpParams().set("symbol", symbol);
+
+    return this.http.post(environment.apiPath + "/indicator/rsi/settings", {oversold: oversold, overbought: overbought}, {params, headers});
   }
 
   getRsiValuesToFrontend(symbol:string){
     let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());
     let params = new HttpParams().set("symbol", symbol);
 
-    return this.http.get<RsiSettings>(environment.apiPath + "/indicator/rsi", {params,headers} );
+    return this.http.get<RsiSettings>(environment.apiPath + "/indicator/rsi/settings", {params,headers} );
   }
 }

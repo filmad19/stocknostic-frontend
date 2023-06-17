@@ -28,7 +28,7 @@ export class StockDetailCardComponent implements OnInit {
   divDateStyle = 'flex text-xs flex-row justify-center visible'
   rsiStyle = 'invisible'
   unformattedLabel = [];
-  oversellLimit = 30;
+  oversoldLimit = 30;
   overboughtLimit = 70;
 
   button1 = 'solid'
@@ -57,19 +57,9 @@ export class StockDetailCardComponent implements OnInit {
   @ViewChild('canva') canvasRef: ElementRef | any;
 
   ngOnInit() {
-    this.displayRsi();
     this.stockDataService.getRsi(this.stock.symbol).subscribe(response => {
       this.recommendation = response.rsi.toFixed(2);
-      if (this.recommendation < 30) {
-        this.recommendation += "  (buy)"
-        this.recommendationStyle = 'font-bold text-green-500 ml-auto'
-      } else if (this.recommendation > 70) {
-        this.recommendation += "  (sell)"
-        this.recommendationStyle = 'font-bold text-red-700 ml-auto'
-      } else {
-        this.recommendation += "  (hold)"
-        this.recommendationStyle = 'font-bold text-grey-500 ml-auto'
-      }
+      this.getRsiData();
     });
 
     this.updateStockListService.eventEmitter.subscribe(selectedStock => {
@@ -164,9 +154,15 @@ export class StockDetailCardComponent implements OnInit {
   }
 
   toggleLike() {
-    this.favouriteService.toggleLiked(this.stock);
+    if(this.stock.liked){
+      this.favouriteService.removeStockFromFavourite(this.stock.symbol).subscribe()
+    } else if(!this.stock.liked){
+      this.favouriteService.addStockToFavourite(this.stock).subscribe(response => {
+        this.getRsiData();
+      })
+    }
+
     this.stock.liked = !this.stock.liked;
-    this.displayRsi();
   }
 
   interval(interval: string) {
@@ -282,10 +278,8 @@ export class StockDetailCardComponent implements OnInit {
       formattedLabels.push(formattedLabel);
     }
 
-
     this.chartLabels = formattedLabels;
   }
-
 
   calcPercentage(){
     let previousePrice = this.stock.previousClosePrice
@@ -298,12 +292,6 @@ export class StockDetailCardComponent implements OnInit {
     let percent: number =  (difference / previousePrice) * 100;
     this.stockPercentageGain = percent.toFixed(2);
 
-    // console.log(this.stock.symbol)
-    // console.log("Last Price: ", this.stock.previousClosePrice)
-    // console.log("closePrices[0]: ", this.closePrices[0])
-    // console.log("current Price: ", this.stock.currentPrice)
-    // console.log("percentage gain: ", this.stockPercentageGain)
-
     if (percent < 0) {
       this.percentageStyle = 'text-red-700'
     } else {
@@ -311,24 +299,36 @@ export class StockDetailCardComponent implements OnInit {
     }
   }
 
-  displayRsi() {
+  getRsiData() {
     if (this.stock.liked) {
       this.rsiStyle = 'visible'
     } else {
       this.rsiStyle = 'invisible'
     }
-    this.getRsiSettings();
+
+    this.indicatorService.getRsiValuesToFrontend(this.stock.symbol).subscribe( response => {
+      this.overboughtLimit = response.overbought;
+      this.oversoldLimit = response.oversold;
+      this.setRecommendation();
+    });
   }
 
-  getRsiSettings(){
-    this.indicatorService.getRsiValuesToFrontend(this.stock.symbol).subscribe( response => {
-        this.overboughtLimit = response.overbought;
-        this.oversellLimit = response.oversold;
-      });
+  setRecommendation(){
+    if (this.recommendation < this.oversoldLimit) {
+      // this.recommendation += "  (buy)"
+      this.recommendationStyle = 'font-bold text-green-500 ml-auto'
+    } else if (this.recommendation > this.overboughtLimit) {
+      // this.recommendation += "  (sell)"
+      this.recommendationStyle = 'font-bold text-red-700 ml-auto'
+    } else {
+      // this.recommendation += "  (hold)"
+      this.recommendationStyle = 'font-bold text-grey-500 ml-auto'
+    }
   }
 
   sendRsiData() {
-    // console.log(this.oversellLimit + ' - ' + this.overboughtLimit);
-    this.indicatorService.sendRsiValuesToBackend(this.oversellLimit, this.overboughtLimit, this.stock.symbol);
+    this.indicatorService.sendRsiValuesToBackend(this.oversoldLimit, this.overboughtLimit, this.stock.symbol).subscribe(response => {
+      this.setRecommendation();
+    });
   }
 }

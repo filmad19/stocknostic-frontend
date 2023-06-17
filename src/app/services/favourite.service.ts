@@ -18,15 +18,8 @@ export class FavouriteService {
   constructor(private http: HttpClient,
               private userService: UserService) { }
 
-  toggleLiked(stock: Stock){
-    if(stock.liked){
-      this.removeStockFromFavourite(stock.symbol).subscribe()
-    } else if(!stock.liked){
-      this.addStockToFavourite(stock).subscribe()
-    }
-  }
 
-  private addStockToFavourite(stock: Stock){
+  addStockToFavourite(stock: Stock){
     let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());
 
     return this.http.post<Stock[]> (
@@ -34,7 +27,7 @@ export class FavouriteService {
     )
   }
 
-  private removeStockFromFavourite(stockSymbol: string){
+  removeStockFromFavourite(stockSymbol: string){
     let headers = new HttpHeaders().set("access_token", this.userService.getUserAccessToken());
     let params = new HttpParams().set("symbol", stockSymbol);
 

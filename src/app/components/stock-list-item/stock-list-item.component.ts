@@ -52,13 +52,6 @@ export class StockListItemComponent implements OnInit {
     let percent: number =  (difference / this.stock.previousClosePrice) * 100;
     this.stockPercentageGain = percent.toFixed(2);
 
-    // if(this.stock.symbol == "AAPL"){
-    //   console.log(this.stock.symbol)
-    //   console.log("Last Price: ", this.stock.previousClosePrice)
-    //   console.log("current Price: ", this.stock.currentPrice)
-    //   console.log("percentage gain: ", this.stockPercentageGain)
-    // }
-
     if (percent < 0){
       this.percentageStyle = 'font-bold text-right text-red-700'
     }else {
@@ -67,12 +60,16 @@ export class StockListItemComponent implements OnInit {
   }
 
   toggleLike() {
-    this.favouriteService.toggleLiked(this.stock);
+    if(this.stock.liked){
+      this.favouriteService.removeStockFromFavourite(this.stock.symbol).subscribe()
+    } else if(!this.stock.liked){
+      this.favouriteService.addStockToFavourite(this.stock).subscribe()
+    }
+
     this.stock.liked = !this.stock.liked;
   }
 
   async openModal() {
-    console.log(this.stock)
     const modal = await this.modalController.create({
       component: StockDetailCardComponent,
       componentProps: {
