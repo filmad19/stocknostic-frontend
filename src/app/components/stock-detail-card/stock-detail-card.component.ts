@@ -63,7 +63,7 @@ export class StockDetailCardComponent implements OnInit {
       this.getRsiConfig();
     });
     // recalculate the percentage gain/loss
-    this.updateStockListService.eventEmitter.subscribe(selectedStock => {
+    this.updateStockListService.priceWebsocketEvent.subscribe(selectedStock => {
       if(selectedStock === this.stock){
         this.calcPercentage()
       }
@@ -166,6 +166,7 @@ export class StockDetailCardComponent implements OnInit {
     }
 
     this.stock.liked = !this.stock.liked;
+    this.updateStockListService.likedEvent.emit(this.stock);
   }
 
   interval(interval: string) {
@@ -297,7 +298,7 @@ export class StockDetailCardComponent implements OnInit {
     this.stockPercentageGain = percent.toFixed(2);
 
     //styling the gain/loss
-    if (percent < 0) {
+    if (this.stockPercentageGain < 0) {
       this.percentageStyle = 'text-red-700'
     } else {
       this.percentageStyle = 'text-green-500'

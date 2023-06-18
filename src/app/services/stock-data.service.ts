@@ -82,7 +82,7 @@ export class StockDataService {
         if(selectedStock != null) {
           selectedStock.currentPrice = webStock.price
           // use eventEmitter to notify the list component or the detailed view component to update the price
-          updateStockListService.eventEmitter.emit(selectedStock);
+          updateStockListService.priceWebsocketEvent.emit(selectedStock);
         }
       };
     });

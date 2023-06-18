@@ -39,11 +39,18 @@ export class StockListItemComponent implements OnInit {
     this.setInitialPrices()
 
     // detect changes to the price and recalculate the percentage gain/loss
-    this.updateStockListService.eventEmitter.subscribe(selectedStock => {
+    this.updateStockListService.priceWebsocketEvent.subscribe(selectedStock => {
       if(selectedStock === this.stock){
         this.stock.currentPrice = selectedStock.currentPrice.toFixed(2);
         this.cdr.detectChanges()
         this.calcPercentage()
+      }
+    });
+
+    // detect changes if the liked state is changing (list does not rerender if stock is liked in the detailed view)
+    this.updateStockListService.likedEvent.subscribe(selectedStock => {
+      if(selectedStock === this.stock){
+        this.cdr.detectChanges();
       }
     });
   }
@@ -51,7 +58,11 @@ export class StockListItemComponent implements OnInit {
   setInitialPrices(){
     //set the current price to the latest in the list
     let data = this.stock.pricePointDtoList.map((entry: PricePoint) => entry.close);
-    this.stock.currentPrice = data[data.length - 1].toFixed(2);
+    if(data[data.length - 1] != null){
+      this.stock.currentPrice = data[data.length - 1].toFixed(2);
+    } else {
+      this.stock.currentPrice = this.stock.previousClosePrice
+    }
     this.calcPercentage()
   }
 
