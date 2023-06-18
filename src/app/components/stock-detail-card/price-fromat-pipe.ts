@@ -4,6 +4,11 @@ import { DecimalPipe } from '@angular/common';
 @Pipe({
   name: 'priceFormat'
 })
+
+/*
+  Stefan Gherghles
+  14.05.2023
+ */
 export class PriceFormatPipe implements PipeTransform {
   constructor(private decimalPipe: DecimalPipe) {}
 

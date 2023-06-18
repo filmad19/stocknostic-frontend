@@ -16,13 +16,10 @@ import {DecimalPipe} from "@angular/common";
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DecimalPipe]
 })
-
 /*
-* Matthias Filzmaier
-* 14.05.2023
-* stocknostic
-*/
-
+  Stefan Gherghles
+  14.05.2023
+ */
 export class StockListItemComponent implements OnInit {
   stockPercentageGain: string = '';
   percentageStyle: string = 'font-bold text-right'
@@ -102,11 +99,6 @@ export class StockListItemComponent implements OnInit {
       }
     });
     return await modal.present(); //opens modal
-  }
-
-  formatPrice(price: number): string {//formats 1000 to - 1,000.00
-    const formattedPrice = this.decimalPipe.transform(price, '1.2-2');//digit pattern
-    return formattedPrice !== null ? formattedPrice : '';
   }
 
 }

@@ -18,7 +18,10 @@ import {DecimalPipe} from "@angular/common";
   styleUrls: ['./stock-detail-card.component.scss'],
   providers: [DecimalPipe]
 })
-
+/*
+  Stefan Gherghles
+  14.05.2023
+ */
 export class StockDetailCardComponent implements OnInit {
   currentInterval = Interval.day;
   closePrices: number[] = []
@@ -29,7 +32,6 @@ export class StockDetailCardComponent implements OnInit {
   date: string = '';
   showDate = false;
   divDateStyle = 'flex text-xs flex-row justify-center visible'
-  rsiStyle = 'invisible'
   unformattedLabel = [];
   oversoldLimit = 30;
   overboughtLimit = 70;
@@ -284,12 +286,6 @@ export class StockDetailCardComponent implements OnInit {
 
 
   getRsiData() {
-        //RSI-settings only visible when liked
-        if (this.stock.liked) {
-          this.rsiStyle = 'visible'
-        } else {
-          this.rsiStyle = 'invisible'
-        }
 
     //get the rsi configuration parameters
     this.indicatorService.getRsiConfiguration(this.stock.symbol).subscribe(response => {
@@ -319,9 +315,5 @@ export class StockDetailCardComponent implements OnInit {
       });
     }
 
-    formatPrice(price:number): string {
-      const formattedPrice = this.decimalPipe.transform(price, '1.2-2'); //formats number using method in price-format-pipe
-      return formattedPrice !== null ? formattedPrice : '';
-    }
 
 }
