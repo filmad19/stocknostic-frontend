@@ -7,12 +7,14 @@ import {StockDataService} from "../../services/stock-data.service";
 import {PricePoint} from "../../shared/PricePoint";
 import {FavouriteService} from "../../services/favourite.service";
 import {UpdateStockListService} from "../../services/update-stock-list.service";
+import {DecimalPipe} from "@angular/common";
 
 @Component({
   selector: 'app-stock-list-item',
   templateUrl: './stock-list-item.component.html',
   styleUrls: ['./stock-list-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DecimalPipe]
 })
 
 /*
@@ -32,7 +34,8 @@ export class StockListItemComponent implements OnInit {
               private stockDataService: StockDataService,
               private favouriteService: FavouriteService,
               private updateStockListService: UpdateStockListService,
-              private cdr: ChangeDetectorRef) { }
+              private cdr: ChangeDetectorRef,
+              private decimalPipe: DecimalPipe) { }
 
 
   ngOnInit() {
@@ -55,7 +58,7 @@ export class StockListItemComponent implements OnInit {
     });
   }
 
-  setInitialPrices(){
+  setInitialPrices(){ //sets price
     //set the current price to the latest in the list
     let data = this.stock.pricePointDtoList.map((entry: PricePoint) => entry.close);
     if(data[data.length - 1] != null){
@@ -66,20 +69,20 @@ export class StockListItemComponent implements OnInit {
     this.calcPercentage()
   }
 
-  calcPercentage(){
+  calcPercentage(){ //calcs percentage
     let difference: number = (this.stock.currentPrice - this.stock.previousClosePrice);
     let percent: number =  (difference / this.stock.previousClosePrice) * 100;
     this.stockPercentageGain = percent.toFixed(2);
 
     //format percentage
-    if (percent < 0){
+    if (percent < 0){ //percentage color
       this.percentageStyle = 'font-bold text-right text-red-700'
     }else {
       this.percentageStyle = 'font-bold text-right text-green-500'
     }
   }
 
-  toggleLike() {
+  toggleLike() {//removes and adds stock to favourite
     // add or remove stock of the favourite list
     if(this.stock.liked){
       this.favouriteService.removeStockFromFavourite(this.stock.symbol).subscribe()
@@ -90,14 +93,20 @@ export class StockListItemComponent implements OnInit {
     this.stock.liked = !this.stock.liked;
   }
 
-  async openModal() {
+  async openModal() { //opens the detail view
     const modal = await this.modalController.create({
       component: StockDetailCardComponent,
-      componentProps: {
+      componentProps: { // sends stock and percentage gain to detail
         stock: this.stock,
         stockPercentageGain: this.stockPercentageGain
       }
     });
-    return await modal.present();
+    return await modal.present(); //opens modal
   }
+
+  formatPrice(price: number): string {//formats 1000 to - 1,000.00
+    const formattedPrice = this.decimalPipe.transform(price, '1.2-2');//digit pattern
+    return formattedPrice !== null ? formattedPrice : '';
+  }
+
 }

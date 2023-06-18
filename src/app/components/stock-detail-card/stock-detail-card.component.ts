@@ -10,11 +10,13 @@ import {FavouriteService} from "../../services/favourite.service";
 import {UserService} from "../../services/user.service";
 import {UpdateStockListService} from "../../services/update-stock-list.service";
 import {IndicatorService} from "../../services/indicator.service";
+import {DecimalPipe} from "@angular/common";
 
 @Component({
   selector: 'app-stock-detail-card',
   templateUrl: './stock-detail-card.component.html',
   styleUrls: ['./stock-detail-card.component.scss'],
+  providers: [DecimalPipe]
 })
 
 export class StockDetailCardComponent implements OnInit {
@@ -23,6 +25,7 @@ export class StockDetailCardComponent implements OnInit {
 
   percentageStyle: string = '';
   recommendationStyle: string = ''
+  recomendationDesc: string = ''
   date: string = '';
   showDate = false;
   divDateStyle = 'flex text-xs flex-row justify-center visible'
@@ -47,7 +50,9 @@ export class StockDetailCardComponent implements OnInit {
               private favouriteService: FavouriteService,
               private updateStockListService: UpdateStockListService,
               private userService: UserService,
-              private indicatorService: IndicatorService) {}
+              private indicatorService: IndicatorService,
+              private decimalPipe: DecimalPipe) {
+  }
 
   stock: Stock | any;
   recommendation: string | any;
@@ -60,7 +65,7 @@ export class StockDetailCardComponent implements OnInit {
     // get rsi configuration
     this.stockDataService.getRsi(this.stock.symbol).subscribe(response => {
       this.recommendation = response.rsi.toFixed(2);
-      this.getRsiConfig();
+      this.getRsiData(); //gets RSI
     });
     // recalculate the percentage gain/loss
     this.updateStockListService.priceWebsocketEvent.subscribe(selectedStock => {
@@ -74,11 +79,11 @@ export class StockDetailCardComponent implements OnInit {
     let ctx = this.canvasRef.nativeElement.getContext('2d');
 
     this.stockDataService.getStockPriceHistory(this.stock.symbol, this.currentInterval).subscribe(response => {
-      this.chartLabels = response.map((entry: PricePoint) => entry.timestamp);
+      this.chartLabels = response.map((entry: PricePoint) => entry.timestamp); //gets stockhistory
 
-      if (this.currentInterval != Interval.day) {
+      if (this.currentInterval != Interval.day) { //for labels
         this.formatLabels(false);
-      }else {
+      } else {
         this.formatLabels(true);
       }
 
@@ -151,17 +156,16 @@ export class StockDetailCardComponent implements OnInit {
   };
 
   dismissModal() {
-    this.modalController.dismiss();
+    this.modalController.dismiss(); //metod for closing detailed view
   }
 
   toggleLike() {
-    // add or remove stock of the favourite list
-    if(this.stock.liked){
-      this.favouriteService.removeStockFromFavourite(this.stock.symbol).subscribe()
-    } else if(!this.stock.liked){
+    if (this.stock.liked) {
+      this.favouriteService.removeStockFromFavourite(this.stock.symbol).subscribe() //adds or removes stock from favourite
+    } else if (!this.stock.liked) {
       this.favouriteService.addStockToFavourite(this.stock).subscribe(response => {
         //load the rsi config, because the config is only available when the stock is liked
-        this.getRsiConfig();
+        this.getRsiData();
       })
     }
 
@@ -170,76 +174,53 @@ export class StockDetailCardComponent implements OnInit {
   }
 
   interval(interval: string) {
+    //method for interval buttons (graph buttons)
+    this.button1 = 'outline'
+    this.button2 = 'outline'
+    this.button3 = 'outline'
+    this.button4 = 'outline'
+    this.button5 = 'outline'
+    this.button6 = 'outline'
+    this.button7 = 'outline'
+
     switch (interval) {
       case 'week':
         this.currentInterval = Interval.week;
         this.showDate = false;
-        this.button1 = 'outline'
         this.button2 = 'solid'
-        this.button3 = 'outline'
-        this.button4 = 'outline'
-        this.button5 = 'outline'
-        this.button6 = 'outline'
-        this.button7 = 'outline'
         break;
 
       case 'month':
         this.currentInterval = Interval.month;
         this.showDate = false;
-        this.button1 = 'outline'
-        this.button2 = 'outline'
         this.button3 = 'solid'
-        this.button4 = 'outline'
-        this.button5 = 'outline'
-        this.button6 = 'outline'
-        this.button7 = 'outline'
+
         break;
 
       case 'month3':
         this.currentInterval = Interval.month3;
         this.showDate = false;
-        this.button1 = 'outline'
-        this.button2 = 'outline'
-        this.button3 = 'outline'
         this.button4 = 'solid'
-        this.button5 = 'outline'
-        this.button6 = 'outline'
-        this.button7 = 'outline'
+
         break;
 
       case 'year':
         this.currentInterval = Interval.year;
         this.showDate = false;
-        this.button1 = 'outline'
-        this.button2 = 'outline'
-        this.button3 = 'outline'
-        this.button4 = 'outline'
         this.button5 = 'solid'
-        this.button6 = 'outline'
-        this.button7 = 'outline'
+
         break;
 
       case 'year5':
         this.currentInterval = Interval.year5;
         this.showDate = false;
-        this.button1 = 'outline'
-        this.button2 = 'outline'
-        this.button3 = 'outline'
-        this.button4 = 'outline'
-        this.button5 = 'outline'
         this.button6 = 'solid'
-        this.button7 = 'outline'
+
         break;
 
       case 'year20':
         this.currentInterval = Interval.year20;
         this.showDate = false;
-        this.button1 = 'outline'
-        this.button2 = 'outline'
-        this.button3 = 'outline'
-        this.button4 = 'outline'
-        this.button5 = 'outline'
-        this.button6 = 'outline'
         this.button7 = 'solid'
         break;
 
@@ -247,16 +228,10 @@ export class StockDetailCardComponent implements OnInit {
         this.currentInterval = Interval.day;
         this.showDate = true;
         this.button1 = 'solid'
-        this.button2 = 'outline'
-        this.button3 = 'outline'
-        this.button4 = 'outline'
-        this.button5 = 'outline'
-        this.button6 = 'outline'
-        this.button7 = 'outline'
         break;
     }
 
-    if (this.showDate) {
+    if (this.showDate) { //displays date when user presses on day graphbutton
       this.divDateStyle = 'flex text-xs flex-row justify-center visible'
     } else {
       this.divDateStyle = 'flex text-xs flex-row justify-center invisible'
@@ -265,36 +240,38 @@ export class StockDetailCardComponent implements OnInit {
 
   }
 
-  formatLabels(day: boolean) {
+  formatLabels(day: boolean) { //method for formating labels of graph
     const formattedLabels: string[] = [];
     let index: number;
-    this.unformattedLabel = this.chartLabels;
+    this.unformattedLabel = this.chartLabels; // gets the unformatted labels example for a label 12-07-2023T10:30
 
-    if (!day) {
+    if (!day) {//if graph of day
       index = 0;
     } else {
       index = 1;
     }
 
     for (const label of this.chartLabels) {
-      const formattedLabel = label.split("T")[index];
-      this.date = label.split("T")[0];
-      formattedLabels.push(formattedLabel);
+      const formattedLabel = label.split("T")[index]; //splits the label on T
+      this.date = label.split("T")[0]; //gets the date incase the user selects the date button
+      formattedLabels.push(formattedLabel); //put formated label on list
     }
 
-    this.chartLabels = formattedLabels;
+    this.chartLabels = formattedLabels; //sets the formatted labels
   }
 
-  calcPercentage(){
+  calcPercentage() {
     let previousePrice = this.stock.previousClosePrice
 
-    if(this.currentInterval != Interval.day){
-      //the previousClosePrice is yesterdays closing price, so for 1 month the first element of the list has to be taken for percentage gain
+    if (this.currentInterval != Interval.day) {
+      //the previousClosePrice is yesterday's closing price,
+      // so for 1 month the first element of the list has to be taken for percentage gain
       previousePrice = this.closePrices[0]
     }
 
+    //percentage calculation
     let difference: number = (this.stock.currentPrice - previousePrice);
-    let percent: number =  (difference / previousePrice) * 100;
+    let percent: number = (difference / previousePrice) * 100;
     this.stockPercentageGain = percent.toFixed(2);
 
     //styling the gain/loss
@@ -305,13 +282,14 @@ export class StockDetailCardComponent implements OnInit {
     }
   }
 
-  getRsiConfig() {
-    //only available if the stock is liked
-    if (this.stock.liked) {
-      this.rsiStyle = 'visible'
-    } else {
-      this.rsiStyle = 'invisible'
-    }
+
+  getRsiData() {
+        //RSI-settings only visible when liked
+        if (this.stock.liked) {
+          this.rsiStyle = 'visible'
+        } else {
+          this.rsiStyle = 'invisible'
+        }
 
     //get the rsi configuration parameters
     this.indicatorService.getRsiConfiguration(this.stock.symbol).subscribe(response => {
@@ -321,23 +299,29 @@ export class StockDetailCardComponent implements OnInit {
     });
   }
 
-  setRecommendation(){
-    if (this.recommendation < this.oversoldLimit) {
-      // this.recommendation += "  (buy)"
-      this.recommendationStyle = 'font-bold text-green-500 ml-auto'
-    } else if (this.recommendation > this.overboughtLimit) {
-      // this.recommendation += "  (sell)"
-      this.recommendationStyle = 'font-bold text-red-700 ml-auto'
-    } else {
-      // this.recommendation += "  (hold)"
-      this.recommendationStyle = 'font-bold text-grey-500 ml-auto'
+    setRecommendation()
+    {
+      if (this.recommendation < this.oversoldLimit) { //formating function with tailwind css code
+        this.recomendationDesc = "buy"
+        this.recommendationStyle = 'font-bold text-green-500 ml-auto'
+      } else if (this.recommendation > this.overboughtLimit) {
+        this.recomendationDesc = "sell"
+        this.recommendationStyle = 'font-bold text-red-700 ml-auto'
+      } else {
+        this.recomendationDesc = "hold"
+        this.recommendationStyle = 'font-bold text-grey-500 ml-auto'
+      }
     }
-  }
 
-  sendRsiData() {
-    //send the config to the backend
-    this.indicatorService.setRsiConfiguration(this.oversoldLimit, this.overboughtLimit, this.stock.symbol).subscribe(response => {
-      this.setRecommendation();
-    });
-  }
+    sendRsiData() {
+      this.indicatorService.setRsiConfiguration(this.oversoldLimit, this.overboughtLimit, this.stock.symbol).subscribe(response => {
+        this.setRecommendation(); //sends RSI to Backend and set the Information
+      });
+    }
+
+    formatPrice(price:number): string {
+      const formattedPrice = this.decimalPipe.transform(price, '1.2-2'); //formats number using method in price-format-pipe
+      return formattedPrice !== null ? formattedPrice : '';
+    }
+
 }

@@ -10,6 +10,7 @@ import { HomePage } from './home.page';
 import {StockDetailCardComponent} from "../../components/stock-detail-card/stock-detail-card.component";
 import {NgChartsModule} from "ng2-charts";
 import {StockListItemComponent} from "../../components/stock-list-item/stock-list-item.component";
+import {PriceFormatPipe} from "../../components/stock-detail-card/price-fromat-pipe";
 
 @NgModule({
   imports: [
@@ -22,6 +23,6 @@ import {StockListItemComponent} from "../../components/stock-list-item/stock-lis
     exports: [
         StockDetailCardComponent
     ],
-    declarations: [HomePage, StockDetailCardComponent, StockListItemComponent]
+    declarations: [HomePage, StockDetailCardComponent, StockListItemComponent, PriceFormatPipe]
 })
 export class HomePageModule {}

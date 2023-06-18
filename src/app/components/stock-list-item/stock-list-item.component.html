@@ -9,7 +9,7 @@
       <ion-card-subtitle>{{stock.companyName}}</ion-card-subtitle>
     </div>
     <div class="ml-auto">
-      <div class="font-bold text-white text-lg text-right">{{stock.currentPrice}}</div>
+      <div class="font-bold text-white text-lg text-right">{{stock.currentPrice | priceFormat }}</div>
       <div class="{{percentageStyle}}">{{stockPercentageGain}}%</div>
     </div>
   </div>
