@@ -17,9 +17,11 @@ import {DecimalPipe} from "@angular/common";
   providers: [DecimalPipe]
 })
 /*
-  Stefan Gherghles
-  14.05.2023
- */
+* Stefan Ghergheles
+* 14.05.2023
+* stocknostic
+*/
+
 export class StockListItemComponent implements OnInit {
   stockPercentageGain: string = '';
   percentageStyle: string = 'font-bold text-right'
@@ -31,8 +33,7 @@ export class StockListItemComponent implements OnInit {
               private stockDataService: StockDataService,
               private favouriteService: FavouriteService,
               private updateStockListService: UpdateStockListService,
-              private cdr: ChangeDetectorRef,
-              private decimalPipe: DecimalPipe) { }
+              private cdr: ChangeDetectorRef) { }
 
 
   ngOnInit() {
@@ -42,8 +43,8 @@ export class StockListItemComponent implements OnInit {
     this.updateStockListService.priceWebsocketEvent.subscribe(selectedStock => {
       if(selectedStock === this.stock){
         this.stock.currentPrice = selectedStock.currentPrice.toFixed(2);
-        this.cdr.detectChanges()
         this.calcPercentage()
+        this.cdr.detectChanges()
       }
     });
 

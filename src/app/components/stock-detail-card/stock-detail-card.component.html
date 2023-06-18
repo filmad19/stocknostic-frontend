@@ -61,28 +61,27 @@
       </div>
     </div>
 
-    <div *ngIf="stock.liked">
-            <div class="flex flex-row mt-2">
-              <ion-label class="ml-8 text-xs">oversold</ion-label>
-              <ion-label class="ml-3 text-xs">overbought</ion-label>
-            </div>
+    <div class="mt-2">
+      <div *ngIf="stock.liked">
+        <div class="flex flex-row">
+          <ion-label class="ml-8 text-xs">oversold</ion-label>
+          <ion-label class="ml-3 text-xs">overbought</ion-label>
+        </div>
 
 
-            <div class="flex flex-row items-center">
-      <!--          <ion-checkbox checked="true" justify="space-between" class="p-1"></ion-checkbox>-->
-                <span class="ml-1 mr-3 font-bold text-lg">RSI</span>
-                <!-- w-9 items-center border-2 border-blue-600 rounded-lg ml-2-->
+        <div class="flex flex-row items-center">
+          <span class="ml-1 mr-3 font-bold text-lg">RSI</span>
 
-                <ion-item class="border-2 border-blue-600 rounded-lg ml-2 w-20">
-                  <ion-input type="number" placeholder="30" (change)="sendRsiData()" [(ngModel)]="oversoldLimit"></ion-input>
-                </ion-item>
+          <ion-item class="border-2 border-blue-600 rounded-lg ml-2 w-20">
+            <ion-input type="number" placeholder="30" (change)="setRsiConfig()" [(ngModel)]="oversoldLimit"></ion-input>
+          </ion-item>
 
-                <ion-item class="border-2 border-blue-600 rounded-lg ml-1 w-20">
-                  <ion-input  type="number" placeholder="70" (change)="sendRsiData()" [(ngModel)]="overboughtLimit"></ion-input>
-                </ion-item>
-            </div>
+          <ion-item class="border-2 border-blue-600 rounded-lg ml-1 w-20">
+            <ion-input  type="number" placeholder="70" (change)="setRsiConfig()" [(ngModel)]="overboughtLimit"></ion-input>
+          </ion-item>
+        </div>
+      </div>
     </div>
   </ion-card-content>
 </div>
-<!--</ion-card>-->
 

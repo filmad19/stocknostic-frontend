@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {StockDataService} from "../../services/stock-data.service";
 import {ChartConfiguration, ChartOptions} from 'chart.js';
 import {Interval} from "../../shared/Interval";
@@ -19,7 +19,7 @@ import {DecimalPipe} from "@angular/common";
   providers: [DecimalPipe]
 })
 /*
-  Stefan Gherghles
+  Stefan Ghergheles
   14.05.2023
  */
 export class StockDetailCardComponent implements OnInit {
@@ -29,6 +29,8 @@ export class StockDetailCardComponent implements OnInit {
   percentageStyle: string = '';
   recommendationStyle: string = ''
   recomendationDesc: string = ''
+  graphColor: string = '';
+
   date: string = '';
   showDate = false;
   divDateStyle = 'flex text-xs flex-row justify-center visible'
@@ -53,7 +55,7 @@ export class StockDetailCardComponent implements OnInit {
               private updateStockListService: UpdateStockListService,
               private userService: UserService,
               private indicatorService: IndicatorService,
-              private decimalPipe: DecimalPipe) {
+              private cdr: ChangeDetectorRef) {
   }
 
   stock: Stock | any;
@@ -67,12 +69,15 @@ export class StockDetailCardComponent implements OnInit {
     // get rsi configuration
     this.stockDataService.getRsi(this.stock.symbol).subscribe(response => {
       this.recommendation = response.rsi.toFixed(2);
-      this.getRsiData(); //gets RSI
+      this.getRsiConfig(); //gets RSI
     });
+
     // recalculate the percentage gain/loss
     this.updateStockListService.priceWebsocketEvent.subscribe(selectedStock => {
       if(selectedStock === this.stock){
+        this.stock.currentPrice = selectedStock.currentPrice.toFixed(2);
         this.calcPercentage()
+        this.cdr.detectChanges()
       }
     });
   }
@@ -104,8 +109,8 @@ export class StockDetailCardComponent implements OnInit {
           pointHoverRadius: 8, // grows the point when hovered
           pointRadius: 0,
 
-          borderColor: 'green', // main line color aka $midnight-medium from @riapacheco/yutes/seasonal.scss
-          pointBackgroundColor: 'green',
+          borderColor: this.graphColor, // main line color aka $midnight-medium from @riapacheco/yutes/seasonal.scss
+          pointBackgroundColor: this.graphColor,
           // pointHoverBackgroundColor: '$success',
 
           borderWidth: 2, // main line width
@@ -167,7 +172,7 @@ export class StockDetailCardComponent implements OnInit {
     } else if (!this.stock.liked) {
       this.favouriteService.addStockToFavourite(this.stock).subscribe(response => {
         //load the rsi config, because the config is only available when the stock is liked
-        this.getRsiData();
+        this.getRsiConfig();
       })
     }
 
@@ -279,14 +284,15 @@ export class StockDetailCardComponent implements OnInit {
     //styling the gain/loss
     if (this.stockPercentageGain < 0) {
       this.percentageStyle = 'text-red-700'
+      this.graphColor = "red"
     } else {
       this.percentageStyle = 'text-green-500'
+      this.graphColor = "green"
     }
   }
 
 
-  getRsiData() {
-
+  getRsiConfig() {
     //get the rsi configuration parameters
     this.indicatorService.getRsiConfiguration(this.stock.symbol).subscribe(response => {
       this.overboughtLimit = response.overbought;
@@ -295,25 +301,22 @@ export class StockDetailCardComponent implements OnInit {
     });
   }
 
-    setRecommendation()
-    {
-      if (this.recommendation < this.oversoldLimit) { //formating function with tailwind css code
-        this.recomendationDesc = "buy"
-        this.recommendationStyle = 'font-bold text-green-500 ml-auto'
-      } else if (this.recommendation > this.overboughtLimit) {
-        this.recomendationDesc = "sell"
-        this.recommendationStyle = 'font-bold text-red-700 ml-auto'
-      } else {
-        this.recomendationDesc = "hold"
-        this.recommendationStyle = 'font-bold text-grey-500 ml-auto'
-      }
+  setRsiConfig() {
+    this.indicatorService.setRsiConfiguration(this.oversoldLimit, this.overboughtLimit, this.stock.symbol).subscribe(response => {
+      this.setRecommendation(); //sends RSI to Backend and set the Information
+    });
+  }
+
+  setRecommendation() {
+    if (this.recommendation < this.oversoldLimit) { //formating function with tailwind css code
+      this.recomendationDesc = "buy"
+      this.recommendationStyle = 'font-bold text-green-500 ml-auto'
+    } else if (this.recommendation > this.overboughtLimit) {
+      this.recomendationDesc = "sell"
+      this.recommendationStyle = 'font-bold text-red-700 ml-auto'
+    } else {
+      this.recomendationDesc = "hold"
+      this.recommendationStyle = 'font-bold text-grey-500 ml-auto'
     }
-
-    sendRsiData() {
-      this.indicatorService.setRsiConfiguration(this.oversoldLimit, this.overboughtLimit, this.stock.symbol).subscribe(response => {
-        this.setRecommendation(); //sends RSI to Backend and set the Information
-      });
-    }
-
-
+  }
 }
