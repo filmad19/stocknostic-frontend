@@ -4,6 +4,8 @@
 <!--Stefan Gherghles-->
 <!--14.05.2023-->
 <!--*/-->
+
+<div style="width: 100vw">
   <ion-toolbar>
     <div  class="flex-row items-center">
       <ion-button (click)="dismissModal()" fill="clear" >
@@ -17,71 +19,72 @@
     </div>
   </ion-toolbar>
 
-<div class="pl-0.5 pr-0.5">
-  <div class=" flex flex-row items-center">
-    <div class="flex-column ion-float-left pl-2 pt-1 pb-1" >
-      <ion-card-title class="text-lg">{{stock.symbol}}</ion-card-title>
-      <ion-card-subtitle>{{stock.companyName}}</ion-card-subtitle>
-    </div>
-    <div class="flex-none flex-column font-bold ion-float-right ml-6" >
-      <ion-card-title class="text-lg">{{stock.currentPrice | priceFormat }} {{stock.currency}}</ion-card-title>
-      <ion-card-subtitle class="{{percentageStyle}}">{{stockPercentageGain}}%</ion-card-subtitle>
-    </div>
-  </div>
-
-  <div class="mb-2 flex flex-row items-center w-full">
-    <ion-button (click)="interval('day')" class="m-auto" size="small" slot="start" fill="{{button1}}">1D</ion-button>
-    <ion-button (click)="interval('week')" class="m-auto" size="small" slot="start" fill="{{button2}}">1W</ion-button>
-    <ion-button (click)="interval('month')" class="m-auto" size="small" slot="start" fill="{{button3}}">1M</ion-button>
-    <ion-button (click)="interval('month3')" class="m-auto" size="small" slot="start" fill="{{button4}}">3M</ion-button>
-    <ion-button (click)="interval('year')" class="m-auto" size="small" slot="start" fill="{{button5}}">1Y</ion-button>
-    <ion-button (click)="interval('year5')" class="m-auto" size="small" slot="start" fill="{{button6}}">5Y</ion-button>
-    <ion-button (click)="interval('year20')" class="m-auto" size="small" slot="start" fill="{{button7}}">20Y</ion-button>
-  </div>
-
-  <div class="{{divDateStyle}}">
-    <span>{{date}}</span>
-  </div>
-
-  <div class=" w-full flex justify-center chart-wrapper">
-    <canvas baseChart #canva
-            [type]="'line'"
-            [datasets]="chartData"
-            [labels]="chartLabels"
-            [options]="chartOptions"
-    >
-    </canvas>
-  </div>
-
-  <ion-card-content>
-    <div class="flex flex-row items-center pt-1">
-      <div class="flex flex-row items-center border-2 border-blue-600 rounded-lg p-3 w-full">
-        <span>Recommendation: </span>
-        <span class="{{recommendationStyle}}">{{recommendation}} ({{recomendationDesc}})</span>
+  <div class="pl-1 pr-1">
+    <div class="flex flex-row items-center pr-1 pl-1 mt-1 mb-1">
+      <div class="flex-grow flex-column">
+        <ion-card-title class="text-lg">{{stock.symbol}}</ion-card-title>
+        <ion-card-subtitle>{{stock.companyName}}</ion-card-subtitle>
+      </div>
+      <div class="flex-none flex-column font-bold ml-1">
+        <ion-card-title class="text-lg">{{stock.currentPrice | priceFormat }} {{stock.currency}}</ion-card-title>
+        <ion-card-subtitle class="{{percentageStyle}} ">{{stockPercentageGain}}%</ion-card-subtitle>
       </div>
     </div>
 
-    <div class="mt-2">
-      <div *ngIf="stock.liked">
-        <div class="flex flex-row">
-          <ion-label class="ml-8 text-xs">oversold</ion-label>
-          <ion-label class="ml-3 text-xs">overbought</ion-label>
-        </div>
+    <div class="mb-2 flex flex-row items-center w-full">
+      <ion-button (click)="interval('day')" class="m-auto" size="small" slot="start" fill="{{button1}}">1D</ion-button>
+      <ion-button (click)="interval('week')" class="m-auto" size="small" slot="start" fill="{{button2}}">1W</ion-button>
+      <ion-button (click)="interval('month')" class="m-auto" size="small" slot="start" fill="{{button3}}">1M</ion-button>
+      <ion-button (click)="interval('month3')" class="m-auto" size="small" slot="start" fill="{{button4}}">3M</ion-button>
+      <ion-button (click)="interval('year')" class="m-auto" size="small" slot="start" fill="{{button5}}">1Y</ion-button>
+      <ion-button (click)="interval('year5')" class="m-auto" size="small" slot="start" fill="{{button6}}">5Y</ion-button>
+      <ion-button (click)="interval('year20')" class="m-auto" size="small" slot="start" fill="{{button7}}">20Y</ion-button>
+    </div>
 
+    <div class="{{divDateStyle}}">
+      <span>{{date}}</span>
+    </div>
 
-        <div class="flex flex-row items-center">
-          <span class="ml-1 mr-3 font-bold text-lg">RSI</span>
+    <div class=" w-full flex justify-center chart-wrapper">
+      <canvas baseChart #canva
+              [type]="'line'"
+              [datasets]="chartData"
+              [labels]="chartLabels"
+              [options]="chartOptions"
+      >
+      </canvas>
+    </div>
 
-          <ion-item class="border-2 border-blue-600 rounded-lg ml-2 w-20">
-            <ion-input type="number" placeholder="30" (change)="setRsiConfig()" [(ngModel)]="oversoldLimit"></ion-input>
-          </ion-item>
-
-          <ion-item class="border-2 border-blue-600 rounded-lg ml-1 w-20">
-            <ion-input  type="number" placeholder="70" (change)="setRsiConfig()" [(ngModel)]="overboughtLimit"></ion-input>
-          </ion-item>
+    <ion-card-content>
+      <div class="flex flex-row items-center pt-1">
+        <div class="flex flex-row items-center border-2 border-blue-600 rounded-lg p-3 w-full">
+          <span>Recommendation: </span>
+          <span class="{{recommendationStyle}}">{{recommendation}} ({{recomendationDesc}})</span>
         </div>
       </div>
-    </div>
-  </ion-card-content>
+
+      <div class="mt-2">
+        <div *ngIf="stock.liked">
+          <div class="flex flex-row">
+            <ion-label class="ml-8 text-xs">oversold</ion-label>
+            <ion-label class="ml-3 text-xs">overbought</ion-label>
+          </div>
+
+
+          <div class="flex flex-row items-center">
+            <span class="ml-1 mr-3 font-bold text-lg">RSI</span>
+
+            <ion-item class="border-2 border-blue-600 rounded-lg ml-2 w-20">
+              <ion-input type="number" placeholder="30" (change)="setRsiConfig()" [(ngModel)]="oversoldLimit"></ion-input>
+            </ion-item>
+
+            <ion-item class="border-2 border-blue-600 rounded-lg ml-1 w-20">
+              <ion-input  type="number" placeholder="70" (change)="setRsiConfig()" [(ngModel)]="overboughtLimit"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+      </div>
+    </ion-card-content>
+  </div>
 </div>
 
