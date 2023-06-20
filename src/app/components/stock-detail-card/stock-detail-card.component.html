@@ -63,8 +63,8 @@
         </div>
       </div>
 
-      <div class="mt-2">
-        <div *ngIf="stock.liked">
+      <div class="mt-2" [style.visibility]="stock.liked ? 'visible' : 'hidden'">
+        <div>
           <div class="flex flex-row">
             <ion-label class="ml-8 text-xs">oversold</ion-label>
             <ion-label class="ml-3 text-xs">overbought</ion-label>
