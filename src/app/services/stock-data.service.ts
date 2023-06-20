@@ -80,7 +80,7 @@ export class StockDataService {
 
 
         if(selectedStock != null) {
-          selectedStock.currentPrice = webStock.price
+          selectedStock.currentPrice = webStock.price.toFixed(2);
           // use eventEmitter to notify the list component or the detailed view component to update the price
           updateStockListService.priceWebsocketEvent.emit(selectedStock);
         }

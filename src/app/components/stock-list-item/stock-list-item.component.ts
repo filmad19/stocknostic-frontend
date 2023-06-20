@@ -42,7 +42,7 @@ export class StockListItemComponent implements OnInit {
     // detect changes to the price and recalculate the percentage gain/loss
     this.updateStockListService.priceWebsocketEvent.subscribe(selectedStock => {
       if(selectedStock === this.stock){
-        this.stock.currentPrice = selectedStock.currentPrice.toFixed(2);
+        this.stock.currentPrice = selectedStock.currentPrice
         this.calcPercentage()
         this.cdr.detectChanges()
       }

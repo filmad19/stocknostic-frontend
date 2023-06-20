@@ -75,7 +75,7 @@ export class StockDetailCardComponent implements OnInit {
     // recalculate the percentage gain/loss
     this.updateStockListService.priceWebsocketEvent.subscribe(selectedStock => {
       if(selectedStock === this.stock){
-        this.stock.currentPrice = selectedStock.currentPrice.toFixed(2);
+        this.stock.currentPrice = selectedStock.currentPrice
         this.calcPercentage()
         this.cdr.detectChanges()
       }
@@ -276,13 +276,16 @@ export class StockDetailCardComponent implements OnInit {
       previousePrice = this.closePrices[0]
     }
 
+    console.log("PERCENTAGE: ")
+    console.log("currentPrice = " + this.stock.currentPrice)
+
     //percentage calculation
     let difference: number = (this.stock.currentPrice - previousePrice);
     let percent: number = (difference / previousePrice) * 100;
     this.stockPercentageGain = percent.toFixed(2);
 
     //styling the gain/loss
-    if (this.stockPercentageGain < 0) {
+    if (percent < 0) {
       this.percentageStyle = 'text-red-700'
       this.graphColor = "red"
     } else {
