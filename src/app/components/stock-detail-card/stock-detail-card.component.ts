@@ -96,13 +96,13 @@ export class StockDetailCardComponent implements OnInit {
 
       this.closePrices = response.map((entry: PricePoint) => entry.close);
       this.calcPercentage()
-      const gradient = ctx.createLinearGradient(0, 0, 0, 450);
-      gradient.addColorStop(0, 'rgb(0,255,0)');
-      gradient.addColorStop(1, 'rgba(0, 255, 0, 0)');
+      // const gradient = ctx.createLinearGradient(0, 0, 0, 450);
+      // gradient.addColorStop(0, 'rgb(0,255,0)');
+      // gradient.addColorStop(1, 'rgba(0, 255, 0, 0)');
 
       this.chartData = [
         {
-          label: '$',
+          label: this.stock.currency,
           data: this.closePrices,
 
           pointHitRadius: 15, // expands the hover 'detection' area
@@ -118,12 +118,10 @@ export class StockDetailCardComponent implements OnInit {
           pointBorderWidth: 0, // removes POINT borders
           tension: 0.3, // makes line more squiggly
 
-          backgroundColor: gradient,
+          // backgroundColor: gradient,
 
           scripts: "node_modules/chart.js/dist/Chart.min.js",
           allowedCommonJsDependencies: "chart.js",
-
-
         }
       ];
     });
@@ -275,9 +273,6 @@ export class StockDetailCardComponent implements OnInit {
       // so for 1 month the first element of the list has to be taken for percentage gain
       previousePrice = this.closePrices[0]
     }
-
-    console.log("PERCENTAGE: ")
-    console.log("currentPrice = " + this.stock.currentPrice)
 
     //percentage calculation
     let difference: number = (this.stock.currentPrice - previousePrice);
