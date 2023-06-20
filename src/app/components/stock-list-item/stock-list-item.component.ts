@@ -89,6 +89,7 @@ export class StockListItemComponent implements OnInit {
     }
 
     this.stock.liked = !this.stock.liked;
+    this.updateStockListService.likedEvent.emit(this.stock);
   }
 
   async openModal() { //opens the detail view

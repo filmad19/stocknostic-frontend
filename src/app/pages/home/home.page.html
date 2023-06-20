@@ -5,7 +5,14 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div *ngFor="let stock of stockList">
-    <app-stock-list-item [stock]="stock"></app-stock-list-item>
+
+  <div *ngIf="stockList.length > 0; else noFavourites">
+    <div *ngFor="let stock of stockList">
+        <app-stock-list-item [stock]="stock"></app-stock-list-item>
+    </div>
   </div>
+
+  <ng-template #noFavourites>
+    <div  class="text-center mt-15 text-neutral-500 animate-bounce">no stocks found!</div>
+  </ng-template>
 </ion-content>

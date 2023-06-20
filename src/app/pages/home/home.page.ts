@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {StockDataService} from "../../services/stock-data.service";
 import {Stock} from "../../shared/Stock";
 import {UserService} from "../../services/user.service";
+import {UpdateStockListService} from "../../services/update-stock-list.service";
 
 /*
 * Matthias Filzmaier
@@ -18,12 +19,19 @@ export class HomePage implements OnInit {
   stockList: Stock[] = [];
 
   constructor(private stockDataService: StockDataService,
-              private userService: UserService) { }
+              private userService: UserService,
+              private updateStockListService: UpdateStockListService,) { }
 
   ngOnInit() {
     this.userService.login().subscribe(token => {
       localStorage.setItem('access_token', token.value)
       this.loadList();
+    });
+
+    this.updateStockListService.likedEvent.subscribe(selectedStock => {
+      if(!selectedStock.liked){
+        this.stockList = this.stockList.filter(stock => stock.symbol != selectedStock.symbol)
+      }
     });
   }
 
